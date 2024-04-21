@@ -1,0 +1,35 @@
+{
+  "configurations" : [
+    {
+      "id" : "88DC3F81-D79F-4B05-89B5-914FBA839B56",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:MoreDrama.xcodeproj",
+      "identifier" : "83BA342A2C65B2C40044A149",
+      "name" : "MoreDrama"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:MoreDrama.xcodeproj",
+        "identifier" : "83BA343F2C65B2C50044A149",
+        "name" : "MoreDramaTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:MoreDrama.xcodeproj",
+        "identifier" : "83BA34492C65B2C50044A149",
+        "name" : "MoreDramaUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

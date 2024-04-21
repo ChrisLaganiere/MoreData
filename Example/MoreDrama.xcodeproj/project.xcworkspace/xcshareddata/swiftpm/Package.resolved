@@ -1,0 +1,15 @@
+{
+  "originHash" : "3db1a6534bd7464db4b917e5151dfe4eb86510ceee615e90bea0bb016f510217",
+  "pins" : [
+    {
+      "identity" : "moredata",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ChrisLaganiere/MoreData.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1fa7ed28df65e04b3d747d7e6d803bfdc40b31c2"
+      }
+    }
+  ],
+  "version" : 3
+}
