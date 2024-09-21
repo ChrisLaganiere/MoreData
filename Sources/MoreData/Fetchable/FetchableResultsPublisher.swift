@@ -1,63 +1,106 @@
-import CoreData
+// Copyright © 2024 Ambience Healthcare
+
 import Combine
+import CoreData
 
-/**
- # FetchableResultsPublisher
-
- Publisher which fetches `Fetchable` items from a Core Data managed object context and publishes results using `Combine`, allowing for reactive updates in your UI.
-
- By encapsulating the complexities of `NSFetchedResultsController` and `Combine`, this publisher simplifies the development process and improves code maintainability.
-
- ### Usage
-
- 1. **Initialization:**
-    Create an instance of `FetchableResultsPublisher` with the desired filter, sort criteria, and managed object context. Call `beginFetch()` to start publishing fetch results.
-
-    ```swift
-    let publisher = FetchableResultsPublisher<MyEntity>(
-        filter: .nameContains("Alice"),
-        sort: .nameAscending,
-        moc: myManagedObjectContext
-    )
-    publisher.beginFetch()
-    ```
-
- 2. **Subscribing to Updates:**
-    Subscribe to the `fetchedObjectsPublisher` or `diffPublisher` to receive updates whenever the underlying data changes.
-
-    ```swift
-    let cancellable = publisher.fetchedObjectsPublisher
-        .sink { fetchedObjects in
-            // Update your UI with the fetched objects
-        }
-    ```
-
- 3. **Dynamic Updates:**
-    You can dynamically update the filter, sort, fetch limit, or fetch offset, and the publisher will automatically fetch the updated data.
-
-    ```swift
-    publisher.filter = .ageGreaterThan(25)
-    publisher.sort = .nameAscending
-    ```
-
- 4. **Lifecycle Management:**
-    Control fetching lifecycle using `beginFetch()` and `endFetch()` as needed.
-
- ### Thread Safety
- The FetchableResultsPublisher is designed to be used on the main thread, as indicated by the @MainActor attribute.
-
- ### Advanced Usage
-
- The `diffPublisher` allows you to observe only the differences (changes) in the fetched entities, which can be more efficient for certain scenarios, such as when throttling or combining publishers.
-
- ```swift
- let diffCancellable = publisher.diffPublisher
-     .sink { diff in
-         // Handle changes in the fetched objects
-     }
- */
+/// # FetchableResultsPublisher
+///
+/// Publisher which fetches `Fetchable` items from a Core Data managed object context and publishes results using
+/// `Combine`, allowing for reactive updates in your UI.
+///
+/// By encapsulating the complexities of `NSFetchedResultsController` and `Combine`, this publisher simplifies the
+/// development process and improves code maintainability.
+///
+/// ### Usage
+///
+/// 1. **Initialization:**
+///   Create an instance of `FetchableResultsPublisher` with the desired filter, sort criteria, and managed object
+/// context. Call `beginFetch()` to start publishing fetch results.
+///
+///   ```swift
+///   let publisher = FetchableResultsPublisher<MyEntity>(
+///       filter: .nameContains("Alice"),
+///       sort: .nameAscending,
+///       moc: myManagedObjectContext
+///   )
+///   publisher.beginFetch()
+///   ```
+///
+/// 2. **Subscribing to Updates:**
+///   Subscribe to the `fetchedObjectsPublisher` or `diffPublisher` to receive updates whenever the underlying data
+/// changes.
+///
+///   ```swift
+///   let cancellable = publisher.fetchedObjectsPublisher
+///       .sink { fetchedObjects in
+///           // Update your UI with the fetched objects
+///       }
+///   ```
+///
+/// 3. **Dynamic Updates:**
+///   You can dynamically update the filter, sort, fetch limit, or fetch offset, and the publisher will automatically
+/// fetch the updated data.
+///
+///   ```swift
+///   publisher.filter = .ageGreaterThan(25)
+///   publisher.sort = .nameAscending
+///   ```
+///
+/// 4. **Lifecycle Management:**
+///   Control fetching lifecycle using `beginFetch()` and `endFetch()` as needed.
+///
+/// ### Thread Safety
+/// The FetchableResultsPublisher is designed to be used on the main thread, as indicated by the @MainActor attribute.
+///
+/// ### Advanced Usage
+///
+/// The `diffPublisher` allows you to observe only the differences (changes) in the fetched entities, which can be more
+/// efficient for certain scenarios, such as when throttling or combining publishers.
+///
+/// ```swift
+/// let diffCancellable = publisher.diffPublisher
+///    .sink { diff in
+///        // Handle changes in the fetched objects
+///    }
 @MainActor
-public class FetchableResultsPublisher<ResultType>: NSObject, NSFetchedResultsControllerDelegate, FetchableResultsPublishing where ResultType : NSManagedObject, ResultType : Fetchable {
+public class FetchableResultsPublisher<ResultType>: NSObject, NSFetchedResultsControllerDelegate,
+    FetchableResultsPublishing where ResultType: NSManagedObject, ResultType: Fetchable
+{
+
+    // MARK: Lifecycle
+
+    public init(
+        filter: ResultType.Filter? = nil,
+        sort: ResultType.Sort? = nil,
+        moc: NSManagedObjectContext,
+        fetchLimit: Int = 0,
+        fetchOffset: Int = 0
+    ) {
+        self.filter = filter
+        self.sort = sort
+        self.moc = moc
+        self.fetchLimit = fetchLimit
+        self.fetchOffset = fetchOffset
+
+        self.frc = NSFetchedResultsController(
+            fetchRequest: ResultType.fetchRequest(
+                filter: filter,
+                sort: sort,
+                fetchLimit: fetchLimit,
+                fetchOffset: fetchOffset
+            ),
+            managedObjectContext: moc,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+
+        super.init()
+    }
+
+    // MARK: Public
+
+    /// Block notifying when an error has occurred during fetch
+    public var fetchErrorHandler: ((any Error) -> Void)?
 
     /// The filter criteria used to determine which entities are fetched.
     /// Updating this property will trigger a new fetch.
@@ -93,8 +136,7 @@ public class FetchableResultsPublisher<ResultType>: NSObject, NSFetchedResultsCo
 
     /// An array of the currently fetched entities, reflecting the latest data
     /// based on the applied filter and sort criteria.
-    @MainActor
-    public var fetchedObjects: [ResultType] {
+    @MainActor public var fetchedObjects: [ResultType] {
         return frc.fetchedObjects ?? []
     }
 
@@ -112,56 +154,12 @@ public class FetchableResultsPublisher<ResultType>: NSObject, NSFetchedResultsCo
         $diff
     }
 
-    /// Block notifying when an error has occurred during fetch
-    public var fetchErrorHandler: ((Error) -> Void)?
-
-    // MARK: Private Properties
-
-    /// Context with objects to search
-    private let moc: NSManagedObjectContext
-    /// Controller fetching Core Data objects
-    private let frc: NSFetchedResultsController<ResultType>
-
-    /// Results of fetch request
-    @Published
-    private var diff: CollectionDifference<NSManagedObjectID>? = nil
-
-    // MARK: Life Cycle
-
-    public init(
-        filter: ResultType.Filter? = nil,
-        sort: ResultType.Sort? = nil,
-        moc: NSManagedObjectContext,
-        fetchLimit: Int = 0,
-        fetchOffset: Int = 0
-    ) {
-        self.filter = filter
-        self.sort = sort
-        self.moc = moc
-        self.fetchLimit = fetchLimit
-        self.fetchOffset = fetchOffset
-
-        frc = NSFetchedResultsController(
-            fetchRequest: ResultType.fetchRequest(
-                filter: filter,
-                sort: sort,
-                fetchLimit: fetchLimit,
-                fetchOffset: fetchOffset
-            ),
-            managedObjectContext: moc,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-
-        super.init()
-    }
-
     // MARK: API
 
     /// Starts the fetch operation and begins monitoring changes in the Core Data context.
     public func beginFetch() throws {
         // Reset state
-        self.diff = nil
+        diff = nil
 
         // Activates underlying FRC monitoring for changes by setting delegate
         // https://developer.apple.com/documentation/coredata/nsfetchedresultscontroller#overview
@@ -178,14 +176,26 @@ public class FetchableResultsPublisher<ResultType>: NSObject, NSFetchedResultsCo
 
     // MARK: NSFetchedResultsControllerDelegate
 
-    nonisolated public func controller(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+    public nonisolated func controller(
+        _: NSFetchedResultsController<any NSFetchRequestResult>,
         didChangeContentWith diff: CollectionDifference<NSManagedObjectID>
     ) {
         Task { @MainActor in
             self.diff = diff
         }
     }
+
+    // MARK: Private
+
+    // MARK: Private Properties
+
+    /// Context with objects to search
+    private let moc: NSManagedObjectContext
+    /// Controller fetching Core Data objects
+    private let frc: NSFetchedResultsController<ResultType>
+
+    /// Results of fetch request
+    @Published private var diff: CollectionDifference<NSManagedObjectID>? = nil
 
     // MARK: Private Methods
 

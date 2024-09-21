@@ -1,10 +1,12 @@
+// Copyright © 2024 Ambience Healthcare
+
 import CoreData
 
-/**
- # Fetchable
- Protocol for Core Data entities which can be fetched with a fetch request.
- Implementing `Fetchable` adds a bunch of useful helper methods to your managed entity class.
- */
+// MARK: - Fetchable
+
+/// # Fetchable
+/// Protocol for Core Data entities which can be fetched with a fetch request.
+/// Implementing `Fetchable` adds a bunch of useful helper methods to your managed entity class.
 public protocol Fetchable: NSManagedObject {
     associatedtype Filter: Filtering
     associatedtype Sort: Sorting
@@ -14,14 +16,16 @@ public protocol Fetchable: NSManagedObject {
 }
 
 // MARK: - Helpers
-public extension Fetchable {
+extension Fetchable {
 
     /// Finds all entities matching an optional predicate
-    static func all(
+    public static func all(
         predicate: NSPredicate? = nil,
         sortDescriptors: [NSSortDescriptor] = [],
         moc: NSManagedObjectContext
-    ) throws -> [Self] {
+    ) throws
+        -> [Self]
+    {
         let fetchRequest = fetchRequest(predicate: predicate)
         fetchRequest.sortDescriptors = sortDescriptors
         return try moc.fetch(fetchRequest)
@@ -29,11 +33,13 @@ public extension Fetchable {
 
     /// Finds all entities matching a filter case
     @_disfavoredOverload
-    static func all(
+    public static func all(
         matching filter: Filter? = nil,
         sortedBy sort: Sort? = nil,
         moc: NSManagedObjectContext
-    ) throws -> [Self] {
+    ) throws
+        -> [Self]
+    {
         try all(
             predicate: filter?.predicate,
             sortDescriptors: sort?.sortDescriptors ?? [],
@@ -42,23 +48,27 @@ public extension Fetchable {
     }
 
     /// Finds number of entities matching an optional predicate
-    static func count(
+    public static func count(
         matching predicate: NSPredicate? = nil,
         moc: NSManagedObjectContext
-    ) throws -> Int {
+    ) throws
+        -> Int
+    {
         try moc.count(for: fetchRequest(predicate: predicate))
     }
 
     /// Finds number of entities matching a filter case
-    static func count(
+    public static func count(
         matching filter: Filter,
         moc: NSManagedObjectContext
-    ) throws -> Int {
+    ) throws
+        -> Int
+    {
         try count(matching: filter.predicate, moc: moc)
     }
 
     /// Deletes all entities matching an optional predicate
-    static func deleteAll(
+    public static func deleteAll(
         predicate: NSPredicate? = nil,
         moc: NSManagedObjectContext
     ) throws {
@@ -69,7 +79,7 @@ public extension Fetchable {
     }
 
     /// Deletes all entities matching a filter case
-    static func deleteAll(
+    public static func deleteAll(
         matching filter: Filter,
         moc: NSManagedObjectContext
     ) throws {
@@ -77,10 +87,12 @@ public extension Fetchable {
     }
 
     /// Finds one entity matching an optional predicate
-    static func unique(
+    public static func unique(
         predicate: NSPredicate?,
         moc: NSManagedObjectContext
-    ) throws -> Self? {
+    ) throws
+        -> Self?
+    {
         let results = try all(predicate: predicate, moc: moc)
 
         if results.count > 1 {
@@ -91,24 +103,28 @@ public extension Fetchable {
     }
 
     /// Finds one entity matching a filter case
-    static func unique(
+    public static func unique(
         matching filter: Filter,
         moc: NSManagedObjectContext
-    ) throws -> Self? {
+    ) throws
+        -> Self?
+    {
         try unique(predicate: filter.predicate, moc: moc)
     }
 }
 
 // MARK: - FetchRequest Builders
-public extension Fetchable {
+extension Fetchable {
 
     /// Form `NSFetchRequest` for this entity, with optional predicate
-    static func fetchRequest(
+    public static func fetchRequest(
         predicate: NSPredicate? = nil,
         sortDescriptors: [NSSortDescriptor] = [],
         fetchLimit: Int? = nil,
         fetchOffset: Int? = nil
-    ) -> NSFetchRequest<Self> {
+    )
+        -> NSFetchRequest<Self>
+    {
         let fetchRequest = NSFetchRequest<Self>(entityName: entityName)
         fetchRequest.predicate = predicate
         fetchRequest.sortDescriptors = sortDescriptors
@@ -122,12 +138,14 @@ public extension Fetchable {
     }
 
     /// Form `NSFetchRequest` for this entity, with optional predicate
-    static func fetchRequest(
+    public static func fetchRequest(
         filter: Filter? = nil,
         sort: Sort? = nil,
         fetchLimit: Int? = nil,
         fetchOffset: Int? = nil
-    ) -> NSFetchRequest<Self> {
+    )
+        -> NSFetchRequest<Self>
+    {
         fetchRequest(
             predicate: filter?.predicate,
             sortDescriptors: sort?.sortDescriptors ?? [],
@@ -137,11 +155,14 @@ public extension Fetchable {
     }
 }
 
-// MARK: - Definitions
+// MARK: - FetchableError
+
 enum FetchableError: Error {
     /// Thrown when more results are found than were expected
     case tooManyResults(Int)
 }
+
+// MARK: - FetchConfiguration
 
 /// Configuration options for fetch request
 public struct FetchConfiguration<Result: Fetchable> {

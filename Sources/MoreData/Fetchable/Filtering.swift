@@ -1,18 +1,20 @@
+// Copyright © 2024 Ambience Healthcare
+
 import CoreData
 
-/**
- # Filtering
- Protocol for Core Data filters which specify particular entities to fetch.
- */
+// MARK: - Filtering
+
+/// # Filtering
+/// Protocol for Core Data filters which specify particular entities to fetch.
 public protocol Filtering: Equatable {
     var predicate: NSPredicate? { get }
 }
 
 // MARK: - Helpers
-public extension Filtering {
+extension Filtering {
 
     /// Require match of all subpredicates
-    static func all(_ predicates: [NSPredicate?]) -> NSPredicate? {
+    public static func all(_ predicates: [NSPredicate?]) -> NSPredicate? {
         NSCompoundPredicate(
             andPredicateWithSubpredicates: predicates.compactMap {
                 $0
@@ -21,12 +23,12 @@ public extension Filtering {
     }
 
     /// Require match of all subpredicates
-    static func all(_ filters: [Self]) -> NSPredicate? {
-        all(filters.map({ $0.predicate }))
+    public static func all(_ filters: [Self]) -> NSPredicate? {
+        all(filters.map(\.predicate))
     }
 
     /// Require match of at least one subpredicate
-    static func any(_ predicates: [NSPredicate?]) -> NSPredicate? {
+    public static func any(_ predicates: [NSPredicate?]) -> NSPredicate? {
         NSCompoundPredicate(
             orPredicateWithSubpredicates: predicates.compactMap {
                 $0
@@ -35,17 +37,17 @@ public extension Filtering {
     }
 
     /// Require match of at least one subpredicate
-    static func any(_ filters: [Self]) -> NSPredicate? {
-        any(filters.map({ $0.predicate }))
+    public static func any(_ filters: [Self]) -> NSPredicate? {
+        any(filters.map(\.predicate))
     }
 
     /// Require match of at least one subpredicate
-    static func by(_ filter: Self) -> NSPredicate? {
+    public static func by(_ filter: Self) -> NSPredicate? {
         filter.predicate
     }
 
     /// Inverse a predicate
-    static func not(_ predicate: NSPredicate?) -> NSPredicate? {
+    public static func not(_ predicate: NSPredicate?) -> NSPredicate? {
         guard let predicate else {
             return nil
         }
@@ -53,7 +55,7 @@ public extension Filtering {
     }
 
     /// Inverse a filter
-    static func not(_ filter: Self) -> NSPredicate? {
+    public static func not(_ filter: Self) -> NSPredicate? {
         not(filter.predicate)
     }
 

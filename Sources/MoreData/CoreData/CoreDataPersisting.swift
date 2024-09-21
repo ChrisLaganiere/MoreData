@@ -1,16 +1,17 @@
+// Copyright © 2024 Ambience Healthcare
+
 import CoreData
 
-/**
- # CoreDataPersisting
- Protocol for app data layer persistence controller.
- You must call `load()` before making use of controller.
- */
+// MARK: - CoreDataPersisting
+
+/// # CoreDataPersisting
+/// Protocol for app data layer persistence controller.
+/// You must call `load()` before making use of controller.
 public protocol CoreDataPersisting {
 
     /// A context where entities live, for use displaying views on the main thread.
     /// Use this to read data for building features!
-    @MainActor
-    var viewContext: NSManagedObjectContext { get }
+    @MainActor var viewContext: NSManagedObjectContext { get }
 
     /// Perform actions with a private-queue managed object context that loads into persistent store
     func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void)
@@ -23,10 +24,10 @@ public protocol CoreDataPersisting {
 }
 
 // MARK: Helpers
-public extension CoreDataPersisting {
+extension CoreDataPersisting {
     /// Build writing context for persistent container that can be used in a private background worker thread.
     /// (With default merge policy: `.mergeByPropertyStoreTrumpMergePolicyType`)
-    func newBackgroundContext() -> NSManagedObjectContext {
+    public func newBackgroundContext() -> NSManagedObjectContext {
         newBackgroundContext(merge: .mergeByPropertyStoreTrumpMergePolicyType)
     }
 }

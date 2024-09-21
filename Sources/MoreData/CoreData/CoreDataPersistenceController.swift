@@ -1,31 +1,14 @@
+// Copyright © 2024 Ambience Healthcare
+
 import CoreData
 
-/**
- # CoreDataPersistenceController
- Sets up a persistent container for a Core Data stack.
- */
+// MARK: - CoreDataPersistenceController
+
+/// # CoreDataPersistenceController
+/// Sets up a persistent container for a Core Data stack.
 public final class CoreDataPersistenceController: CoreDataPersisting {
 
-    /// A context where entities live, for use displayingn views on the main thread
-    @MainActor
-    public var viewContext: NSManagedObjectContext {
-        persistentContainer.viewContext
-    }
-
-    /// Shared writer moc where write changes to store are serialized in a private worker queue.
-    /// Write changes are serialized to avoid merge conflicts:
-    /// https://stackoverflow.com/a/45206964
-    lazy var backgroundWriteMoc = newBackgroundContext()
-
-    // MARK: Private Properties
-
-    /// Manager with responsibilities that cover fetching and saving entities in Core Data
-    let persistentContainer: NSPersistentContainer
-
-    /// Schema for entities that can live in persistent container.
-    let managedObjectModel: NSManagedObjectModel
-
-    // MARK: Life Cycle
+    // MARK: Lifecycle
 
     public init(
         config: Configuration = .defaultURL,
@@ -62,6 +45,13 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
         self.persistentContainer = container
     }
 
+    // MARK: Public
+
+    /// A context where entities live, for use displaying views on the main thread
+    @MainActor public var viewContext: NSManagedObjectContext {
+        persistentContainer.viewContext
+    }
+
     // MARK: API
 
     /// Set up controller. You must call this before making use of this controller.
@@ -69,16 +59,15 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
         // Load stores
         var loadError: NSError?
 
-        persistentContainer.loadPersistentStores { [weak self] storeDescription, error in
+        persistentContainer.loadPersistentStores { [weak self] _, error in
             if let error = error as NSError? {
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
+                // Typical reasons for an error here include:
+                // * The parent directory does not exist, cannot be created, or disallows writing.
+                // * The persistent store is not accessible, due to permissions or data protection when the device is
+                // locked.
+                // * The device is out of space.
+                // * The store could not be migrated to the current model version.
+                // Check the error message to determine what the actual problem was.
                 loadError = error
             }
 
@@ -114,12 +103,28 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
         backgroundContext.mergePolicy = NSMergePolicy(merge: merge)
         return backgroundContext
     }
+
+    // MARK: Internal
+
+    /// Shared writer moc where write changes to store are serialized in a private worker queue.
+    /// Write changes are serialized to avoid merge conflicts:
+    /// https://stackoverflow.com/a/45206964
+    lazy var backgroundWriteMoc = newBackgroundContext()
+
+    // MARK: Private Properties
+
+    /// Manager with responsibilities that cover fetching and saving entities in Core Data
+    let persistentContainer: NSPersistentContainer
+
+    /// Schema for entities that can live in persistent container.
+    let managedObjectModel: NSManagedObjectModel
+
 }
 
 // MARK: - Definitions
-public extension CoreDataPersistenceController {
+extension CoreDataPersistenceController {
     /// Configuration options for persistence controller
-    enum Configuration {
+    public enum Configuration {
         /// In-memory only; do not persist
         case inMemory
         /// Persist at custom location, with file URL
@@ -129,7 +134,7 @@ public extension CoreDataPersistenceController {
     }
 
     /// Errors that can occur during persistence
-    enum PersistenceControllerError: String, Error, CustomDebugStringConvertible {
+    public enum PersistenceControllerError: String, Error, CustomDebugStringConvertible {
         case missingPersistentStoreDescription
 
         public var debugDescription: String {
