@@ -20,7 +20,6 @@
 		8335A9AD2C6853850077EE3F /* Statement+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9A92C6853850077EE3F /* Statement+CoreDataProperties.swift */; };
 		8335A9AE2C6853850077EE3F /* Person+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9AA2C6853850077EE3F /* Person+CoreDataClass.swift */; };
 		8335A9AF2C6853850077EE3F /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9AB2C6853850077EE3F /* Person+CoreDataProperties.swift */; };
-		83BA34312C65B2C40044A149 /* MoreDramaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34302C65B2C40044A149 /* MoreDramaApp.swift */; };
 		83BA34332C65B2C50044A149 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83BA34322C65B2C50044A149 /* Assets.xcassets */; };
 		83BA34362C65B2C50044A149 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83BA34352C65B2C50044A149 /* Preview Assets.xcassets */; };
 		83BA343B2C65B2C50044A149 /* MoreDrama.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34392C65B2C50044A149 /* MoreDrama.xcdatamodeld */; };
@@ -28,6 +27,7 @@
 		83BA344F2C65B2C50044A149 /* MoreDramaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA344E2C65B2C50044A149 /* MoreDramaUITests.swift */; };
 		83BA34512C65B2C50044A149 /* MoreDramaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34502C65B2C50044A149 /* MoreDramaUITestsLaunchTests.swift */; };
 		83BA34642C65B7C40044A149 /* MoreDramaAppDataDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34632C65B7C40044A149 /* MoreDramaAppDataDependencies.swift */; };
+		83EC57C22D0659C800B9B4C0 /* MoreDramaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EC57C12D0659C800B9B4C0 /* MoreDramaApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +62,6 @@
 		8335A9AB2C6853850077EE3F /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		83A189012C69C29A00646C38 /* MoreDrama.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MoreDrama.xctestplan; sourceTree = "<group>"; };
 		83BA342B2C65B2C40044A149 /* MoreDrama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoreDrama.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		83BA34302C65B2C40044A149 /* MoreDramaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MoreDramaApp.swift; path = Views/MoreDramaApp.swift; sourceTree = "<group>"; };
 		83BA34322C65B2C50044A149 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83BA34352C65B2C50044A149 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		83BA343A2C65B2C50044A149 /* MoreDrama.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MoreDrama.xcdatamodel; sourceTree = "<group>"; };
@@ -72,6 +71,7 @@
 		83BA344E2C65B2C50044A149 /* MoreDramaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDramaUITests.swift; sourceTree = "<group>"; };
 		83BA34502C65B2C50044A149 /* MoreDramaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDramaUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		83BA34632C65B7C40044A149 /* MoreDramaAppDataDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDramaAppDataDependencies.swift; sourceTree = "<group>"; };
+		83EC57C12D0659C800B9B4C0 /* MoreDramaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDramaApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,7 +188,7 @@
 				8335A98F2C65C7090077EE3F /* Data */,
 				831044562C6C7C5B006C79EA /* Extensions */,
 				8335A9902C65C72B0077EE3F /* Resources */,
-				83BA34302C65B2C40044A149 /* MoreDramaApp.swift */,
+				83EC57C12D0659C800B9B4C0 /* MoreDramaApp.swift */,
 				83BA34632C65B7C40044A149 /* MoreDramaAppDataDependencies.swift */,
 			);
 			path = MoreDrama;
@@ -362,7 +362,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83BA34312C65B2C40044A149 /* MoreDramaApp.swift in Sources */,
 				8335A99D2C65C9450077EE3F /* Person+Filter.swift in Sources */,
 				83BA343B2C65B2C50044A149 /* MoreDrama.xcdatamodeld in Sources */,
 				8335A9A32C68528D0077EE3F /* Statement+Sort.swift in Sources */,
@@ -377,6 +376,7 @@
 				8335A9AF2C6853850077EE3F /* Person+CoreDataProperties.swift in Sources */,
 				8335A99F2C65CA2B0077EE3F /* Person+Sort.swift in Sources */,
 				83BA34642C65B7C40044A149 /* MoreDramaAppDataDependencies.swift in Sources */,
+				83EC57C22D0659C800B9B4C0 /* MoreDramaApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
