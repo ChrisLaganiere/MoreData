@@ -34,6 +34,13 @@ dependencies: [
 
 ## Usage
 
+#### Example App
+
+Included in [`/Example`](./Example) is a sample app, **More Drama**, which makes use of Core Data via this library to save lots of data... Specifically, lots of gossip! Additionally, there are filters by person and by topic, so you can find the hot news! The core of this sample app is implemented in less than 100 lines of code, showing the power and simplicity of **MoreData**.
+
+| <img src="https://github.com/user-attachments/assets/6b23818e-dbc8-4fc5-b6e8-fd3f1ddc5b3b" width=300 /> | <img src="https://github.com/user-attachments/assets/aa570a69-bd99-4f0c-a33a-01c0c3ab9f14" width=300 /> |
+| --- | --- |
+
 ### Fetchable Protocol
 
 The `Fetchable` protocol simplifies the process of fetching Core Data entities. Conform your NSManagedObject subclasses to Fetchable and use the provided helper methods to perform fetches.
