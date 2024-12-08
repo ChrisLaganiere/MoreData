@@ -1,5 +1,5 @@
-import XCTest
 import CoreData
+import XCTest
 @testable import MoreData
 
 final class FetchableTests: XCTestCase {
@@ -70,7 +70,7 @@ final class FetchableTests: XCTestCase {
         )
 
         // Then
-        XCTAssertEqual(sortedEntities.map { $0.name }, ["Alice", "Betty", "Charlie"])
+        XCTAssertEqual(sortedEntities.map(\.name), ["Alice", "Betty", "Charlie"])
     }
 
     func testCountEntities() throws {
@@ -113,7 +113,10 @@ final class FetchableTests: XCTestCase {
         try moc.save()
 
         // When
-        let fetchedEntity = try TestEntity.unique(predicate: NSPredicate(format: "name == %@", "UniqueEntity"), moc: moc)
+        let fetchedEntity = try TestEntity.unique(
+            predicate: NSPredicate(format: "name == %@", "UniqueEntity"),
+            moc: moc
+        )
 
         // Then
         XCTAssertNotNil(fetchedEntity)
@@ -131,7 +134,10 @@ final class FetchableTests: XCTestCase {
         try moc.save()
 
         // When/Then
-        XCTAssertThrowsError(try TestEntity.unique(predicate: NSPredicate(format: "name == %@", "DuplicateEntity"), moc: moc)) { error in
+        XCTAssertThrowsError(try TestEntity.unique(
+            predicate: NSPredicate(format: "name == %@", "DuplicateEntity"),
+            moc: moc
+        )) { error in
             guard case FetchableError.tooManyResults(let count) = error else {
                 return XCTFail("Expected tooManyResults error, got \(error)")
             }

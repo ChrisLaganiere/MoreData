@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		831044552C6C21A1006C79EA /* MockDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831044542C6C21A1006C79EA /* MockDataGenerator.swift */; };
+		831044582C6C7C67006C79EA /* String+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831044572C6C7C67006C79EA /* String+Identifiable.swift */; };
+		831439FF2C9E8BB900DF75B2 /* MoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 831439FE2C9E8BB900DF75B2 /* MoreData */; };
 		8335A99D2C65C9450077EE3F /* Person+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A99C2C65C9450077EE3F /* Person+Filter.swift */; };
 		8335A99F2C65CA2B0077EE3F /* Person+Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A99E2C65CA2B0077EE3F /* Person+Sort.swift */; };
 		8335A9A12C6852860077EE3F /* Statement+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9A02C6852860077EE3F /* Statement+Filter.swift */; };
@@ -17,9 +20,7 @@
 		8335A9AD2C6853850077EE3F /* Statement+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9A92C6853850077EE3F /* Statement+CoreDataProperties.swift */; };
 		8335A9AE2C6853850077EE3F /* Person+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9AA2C6853850077EE3F /* Person+CoreDataClass.swift */; };
 		8335A9AF2C6853850077EE3F /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9AB2C6853850077EE3F /* Person+CoreDataProperties.swift */; };
-		83A189002C69AC2600646C38 /* MoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 83A188FF2C69AC2600646C38 /* MoreData */; };
-		83BA342F2C65B2C40044A149 /* MoreDramaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA342E2C65B2C40044A149 /* MoreDramaApp.swift */; };
-		83BA34312C65B2C40044A149 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34302C65B2C40044A149 /* ContentView.swift */; };
+		83BA34312C65B2C40044A149 /* MoreDramaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34302C65B2C40044A149 /* MoreDramaApp.swift */; };
 		83BA34332C65B2C50044A149 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83BA34322C65B2C50044A149 /* Assets.xcassets */; };
 		83BA34362C65B2C50044A149 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83BA34352C65B2C50044A149 /* Preview Assets.xcassets */; };
 		83BA343B2C65B2C50044A149 /* MoreDrama.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34392C65B2C50044A149 /* MoreDrama.xcdatamodeld */; };
@@ -47,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		831044542C6C21A1006C79EA /* MockDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataGenerator.swift; sourceTree = "<group>"; };
+		831044572C6C7C67006C79EA /* String+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Identifiable.swift"; sourceTree = "<group>"; };
 		8335A99C2C65C9450077EE3F /* Person+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+Filter.swift"; sourceTree = "<group>"; };
 		8335A99E2C65CA2B0077EE3F /* Person+Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+Sort.swift"; sourceTree = "<group>"; };
 		8335A9A02C6852860077EE3F /* Statement+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Statement+Filter.swift"; sourceTree = "<group>"; };
@@ -59,8 +62,7 @@
 		8335A9AB2C6853850077EE3F /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		83A189012C69C29A00646C38 /* MoreDrama.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MoreDrama.xctestplan; sourceTree = "<group>"; };
 		83BA342B2C65B2C40044A149 /* MoreDrama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoreDrama.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		83BA342E2C65B2C40044A149 /* MoreDramaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDramaApp.swift; sourceTree = "<group>"; };
-		83BA34302C65B2C40044A149 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		83BA34302C65B2C40044A149 /* MoreDramaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MoreDramaApp.swift; path = Views/MoreDramaApp.swift; sourceTree = "<group>"; };
 		83BA34322C65B2C50044A149 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83BA34352C65B2C50044A149 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		83BA343A2C65B2C50044A149 /* MoreDrama.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MoreDrama.xcdatamodel; sourceTree = "<group>"; };
@@ -77,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83A189002C69AC2600646C38 /* MoreData in Frameworks */,
+				831439FF2C9E8BB900DF75B2 /* MoreData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +100,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		831044532C6C2198006C79EA /* MockDataGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				831044542C6C21A1006C79EA /* MockDataGenerator.swift */,
+			);
+			path = MockDataGenerator;
+			sourceTree = "<group>";
+		};
+		831044562C6C7C5B006C79EA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				831044572C6C7C67006C79EA /* String+Identifiable.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8310445B2C6C80E0006C79EA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				831044532C6C2198006C79EA /* MockDataGenerator */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		8335A98E2C65C6FD0077EE3F /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +144,7 @@
 		8335A98F2C65C7090077EE3F /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				8310445B2C6C80E0006C79EA /* Services */,
 				8335A98E2C65C6FD0077EE3F /* Models */,
 			);
 			path = Data;
@@ -131,14 +158,6 @@
 				83BA34392C65B2C50044A149 /* MoreDrama.xcdatamodeld */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		8335A9912C65C7450077EE3F /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				83BA34302C65B2C40044A149 /* ContentView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		83BA34222C65B2C40044A149 = {
@@ -167,9 +186,9 @@
 			isa = PBXGroup;
 			children = (
 				8335A98F2C65C7090077EE3F /* Data */,
+				831044562C6C7C5B006C79EA /* Extensions */,
 				8335A9902C65C72B0077EE3F /* Resources */,
-				8335A9912C65C7450077EE3F /* Views */,
-				83BA342E2C65B2C40044A149 /* MoreDramaApp.swift */,
+				83BA34302C65B2C40044A149 /* MoreDramaApp.swift */,
 				83BA34632C65B7C40044A149 /* MoreDramaAppDataDependencies.swift */,
 			);
 			path = MoreDrama;
@@ -224,7 +243,7 @@
 			);
 			name = MoreDrama;
 			packageProductDependencies = (
-				83A188FF2C69AC2600646C38 /* MoreData */,
+				831439FE2C9E8BB900DF75B2 /* MoreData */,
 			);
 			productName = MoreDrama;
 			productReference = 83BA342B2C65B2C40044A149 /* MoreDrama.app */;
@@ -299,7 +318,7 @@
 			);
 			mainGroup = 83BA34222C65B2C40044A149;
 			packageReferences = (
-				83A188FE2C69AC2600646C38 /* XCRemoteSwiftPackageReference "MoreData" */,
+				831439FD2C9E8BB900DF75B2 /* XCLocalSwiftPackageReference "../../MoreData3" */,
 			);
 			productRefGroup = 83BA342C2C65B2C40044A149 /* Products */;
 			projectDirPath = "";
@@ -343,13 +362,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83BA34312C65B2C40044A149 /* ContentView.swift in Sources */,
+				83BA34312C65B2C40044A149 /* MoreDramaApp.swift in Sources */,
 				8335A99D2C65C9450077EE3F /* Person+Filter.swift in Sources */,
 				83BA343B2C65B2C50044A149 /* MoreDrama.xcdatamodeld in Sources */,
 				8335A9A32C68528D0077EE3F /* Statement+Sort.swift in Sources */,
 				8335A9A72C6853630077EE3F /* Statement+Fetchable.swift in Sources */,
-				83BA342F2C65B2C40044A149 /* MoreDramaApp.swift in Sources */,
 				8335A9A52C6853260077EE3F /* Person+Fetchable.swift in Sources */,
+				831044552C6C21A1006C79EA /* MockDataGenerator.swift in Sources */,
+				831044582C6C7C67006C79EA /* String+Identifiable.swift in Sources */,
 				8335A9A12C6852860077EE3F /* Statement+Filter.swift in Sources */,
 				8335A9AC2C6853850077EE3F /* Statement+CoreDataClass.swift in Sources */,
 				8335A9AD2C6853850077EE3F /* Statement+CoreDataProperties.swift in Sources */,
@@ -687,21 +707,16 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		83A188FE2C69AC2600646C38 /* XCRemoteSwiftPackageReference "MoreData" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ChrisLaganiere/MoreData.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		831439FD2C9E8BB900DF75B2 /* XCLocalSwiftPackageReference "../../MoreData3" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../MoreData3;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		83A188FF2C69AC2600646C38 /* MoreData */ = {
+		831439FE2C9E8BB900DF75B2 /* MoreData */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 83A188FE2C69AC2600646C38 /* XCRemoteSwiftPackageReference "MoreData" */;
 			productName = MoreData;
 		};
 /* End XCSwiftPackageProductDependency section */

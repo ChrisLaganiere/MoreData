@@ -5,7 +5,11 @@ import MoreData
 @MainActor
 func makeInMemoryViewContext() throws -> NSManagedObjectContext {
     let managedObjectModel = NSManagedObjectModel.makeTestEntityModel()
-    let controller = try CoreDataPersistenceController(config: .inMemory, name: "TestEntityModel", managedObjectModel: managedObjectModel)
+    let controller = try CoreDataPersistenceController(
+        config: .inMemory,
+        name: "TestEntityModel",
+        managedObjectModel: managedObjectModel
+    )
     try controller.load()
     return controller.viewContext
 }

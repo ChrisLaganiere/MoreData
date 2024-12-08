@@ -1,5 +1,5 @@
-import XCTest
 import CoreData
+import XCTest
 @testable import MoreData
 
 final class CoreDataPersistenceControllerTests: XCTestCase {
@@ -23,7 +23,11 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
     }
 
     func testInitInMemoryConfiguration() throws {
-        sut = try CoreDataPersistenceController(config: .inMemory, name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .inMemory,
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
 
         let storeDescription = sut.persistentContainer.persistentStoreDescriptions.first
         XCTAssertEqual(storeDescription?.url?.absoluteString, "file:///dev/null")
@@ -31,14 +35,22 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
 
     func testInitWithCustomURLConfiguration() throws {
         let customURL = URL(fileURLWithPath: "/tmp/test.sqlite")
-        sut = try CoreDataPersistenceController(config: .url(customURL), name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .url(customURL),
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
 
         let storeDescription = sut.persistentContainer.persistentStoreDescriptions.first
         XCTAssertEqual(storeDescription?.url, customURL)
     }
 
     func testInitWithDefaultURLConfiguration() throws {
-        sut = try CoreDataPersistenceController(config: .defaultURL, name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .defaultURL,
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
 
         let storeDescription = sut.persistentContainer.persistentStoreDescriptions.first
         XCTAssertNotNil(storeDescription?.url)
@@ -47,7 +59,11 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
 
     @MainActor
     func testLoadPersistentStores() throws {
-        sut = try CoreDataPersistenceController(config: .inMemory, name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .inMemory,
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
 
         XCTAssertNoThrow(try sut.load())
 
@@ -58,16 +74,24 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
     func testLoadPersistentStoresFailure() throws {
         // Simulate a failure by providing an invalid URL
         let invalidURL = URL(fileURLWithPath: "/invalid/path/test.sqlite")
-        sut = try CoreDataPersistenceController(config: .url(invalidURL), name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .url(invalidURL),
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
 
         XCTAssertThrowsError(try sut.load(), "Loading should fail due to an invalid URL")
     }
 
     func testPerformBackgroundTask() throws {
-        sut = try CoreDataPersistenceController(config: .inMemory, name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .inMemory,
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
         try sut.load()
 
-        let expectation = self.expectation(description: "Background task should complete")
+        let expectation = expectation(description: "Background task should complete")
 
         sut.performBackgroundTask { context in
             XCTAssertFalse(context.concurrencyType == .mainQueueConcurrencyType)
@@ -78,14 +102,25 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
     }
 
     func testNewBackgroundContextMergePolicy() throws {
-        sut = try CoreDataPersistenceController(config: .inMemory, name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .inMemory,
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
 
         let backgroundContext = sut.newBackgroundContext(merge: .mergeByPropertyObjectTrumpMergePolicyType)
-        XCTAssertEqual((backgroundContext.mergePolicy as? NSMergePolicy)?.mergeType, .mergeByPropertyObjectTrumpMergePolicyType)
+        XCTAssertEqual(
+            (backgroundContext.mergePolicy as? NSMergePolicy)?.mergeType,
+            .mergeByPropertyObjectTrumpMergePolicyType
+        )
     }
 
     func testPerformBackgroundTaskAsync() async throws {
-        sut = try CoreDataPersistenceController(config: .inMemory, name: "TestModel", managedObjectModel: managedObjectModel)
+        sut = try CoreDataPersistenceController(
+            config: .inMemory,
+            name: "TestModel",
+            managedObjectModel: managedObjectModel
+        )
         try sut.load()
 
         let result = await sut.performBackgroundTask { context -> Bool in

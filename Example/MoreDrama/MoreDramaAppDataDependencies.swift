@@ -8,13 +8,18 @@ final class MoreDramaAppDataDependencies {
     /// Controller of persistent app cache
     let persistenceController: CoreDataPersistenceController
 
+    /// Generate sample data in db!
+    let mockDataGenerator: MockDataGenerator
+
     init(persistenceController: CoreDataPersistenceController) {
         self.persistenceController = persistenceController
+        mockDataGenerator = .init(persistenceController: persistenceController)
     }
 
     /// Do initial set up as required for dependencies
     func setUp() throws {
         try persistenceController.load()
+        mockDataGenerator.startGenerating()
     }
 }
 

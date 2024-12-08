@@ -4,6 +4,7 @@ import CoreData
 
 extension Person {
 
+    @NSManaged public var avatarFileName: String
     @NSManaged public var birthdate: Date
     @NSManaged public var name: String
     @NSManaged public var personID: String
@@ -47,5 +48,7 @@ extension Person {
 }
 
 extension Person : Identifiable {
-
+    public var id: String {
+        personID
+    }
 }

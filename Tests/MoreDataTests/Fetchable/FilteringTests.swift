@@ -1,61 +1,35 @@
-import XCTest
 import CoreData
+import XCTest
 @testable import MoreData
 
 final class FilteringTests: XCTestCase {
-
-    func testAllPredicates() {
-        // Given
-        let nameFilter = TestEntityFilter.nameContains("Alice")
-        let ageFilter = TestEntityFilter.ageGreaterThan(25)
-
-        // When
-        let allPredicate = TestEntityFilter.all([nameFilter, ageFilter])
-
-        // Then
-        XCTAssertEqual(allPredicate?.predicateFormat, "name CONTAINS[cd] \"Alice\" AND age > 25")
-    }
 
     func testAllFilters() {
         // Given
         let filters: [TestEntityFilter] = [
             .nameContains("Alice"),
-            .ageGreaterThan(25),
-            .isActive(true)
+            .isActive(true),
         ]
 
         // When
         let allPredicate = TestEntityFilter.all(filters)
 
         // Then
-        XCTAssertEqual(allPredicate?.predicateFormat, "name CONTAINS[cd] \"Alice\" AND age > 25 AND isActive == 1")
-    }
-
-    func testAnyPredicates() {
-        // Given
-        let nameFilter = TestEntityFilter.nameContains("Alice")
-        let ageFilter = TestEntityFilter.ageGreaterThan(25)
-
-        // When
-        let anyPredicate = TestEntityFilter.any([nameFilter.predicate, ageFilter.predicate])
-
-        // Then
-        XCTAssertEqual(anyPredicate?.predicateFormat, "name CONTAINS[cd] \"Alice\" OR age > 25")
+        XCTAssertEqual(allPredicate.predicateFormat, "name CONTAINS \"Alice\" AND isActive == 1")
     }
 
     func testAnyFilters() {
         // Given
         let filters: [TestEntityFilter] = [
             .nameContains("Alice"),
-            .ageGreaterThan(25),
-            .isActive(true)
+            .isActive(true),
         ]
 
         // When
         let anyPredicate = TestEntityFilter.any(filters)
 
         // Then
-        XCTAssertEqual(anyPredicate?.predicateFormat, "name CONTAINS[cd] \"Alice\" OR age > 25 OR isActive == 1")
+        XCTAssertEqual(anyPredicate.predicateFormat, "name CONTAINS \"Alice\" OR isActive == 1")
     }
 
     func testByFilter() {
@@ -66,18 +40,7 @@ final class FilteringTests: XCTestCase {
         let predicate = TestEntityFilter.by(filter)
 
         // Then
-        XCTAssertEqual(predicate?.predicateFormat, "name CONTAINS[cd] \"Alice\"")
-    }
-
-    func testNotPredicate() {
-        // Given
-        let filter = TestEntityFilter.nameContains("Alice")
-
-        // When
-        let notPredicate = TestEntityFilter.not(filter.predicate)
-
-        // Then
-        XCTAssertEqual(notPredicate?.predicateFormat, "NOT name CONTAINS[cd] \"Alice\"")
+        XCTAssertEqual(predicate.predicateFormat, "name CONTAINS \"Alice\"")
     }
 
     func testNotFilter() {
@@ -88,6 +51,6 @@ final class FilteringTests: XCTestCase {
         let notPredicate = TestEntityFilter.not(filter)
 
         // Then
-        XCTAssertEqual(notPredicate?.predicateFormat, "NOT isActive == 1")
+        XCTAssertEqual(notPredicate.predicateFormat, "NOT isActive == 1")
     }
 }

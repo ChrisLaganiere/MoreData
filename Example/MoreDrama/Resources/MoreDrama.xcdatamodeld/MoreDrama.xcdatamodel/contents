@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757.1" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Person" representedClassName="Person" syncable="YES">
+        <attribute name="avatarFileName" attributeType="String"/>
         <attribute name="birthdate" attributeType="Date" defaultDateTimeInterval="-170885760" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="personID" attributeType="String"/>
@@ -9,6 +10,7 @@
     </entity>
     <entity name="Statement" representedClassName="Statement" syncable="YES">
         <attribute name="content" attributeType="String"/>
+        <attribute name="statementID" attributeType="String"/>
         <attribute name="time" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="by" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="stated" inverseEntity="Person"/>
         <relationship name="to" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Person" inverseName="heard" inverseEntity="Person"/>

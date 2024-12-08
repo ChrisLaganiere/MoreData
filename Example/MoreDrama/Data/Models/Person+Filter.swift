@@ -12,19 +12,19 @@ public enum PersonFilter: Filtering {
     /// particular individual
     case personID(String)
 
-    public var predicate: NSPredicate? {
+    public var predicate: NSPredicate {
         switch self {
 
         case .maximumAge(let maximumAge):
             let minimumDate = Date.now.addingTimeInterval(Double(-365 * 60 * 60 * maximumAge))
-            return NSPredicate(format: "%K >= %@", #keyPath(Person.birthdate), minimumDate as CVarArg)
+            return .after(\Person.birthdate, date: minimumDate)
 
         case .minimumAge(let minimumAge):
             let maximumDate = Date.now.addingTimeInterval(Double(-365 * 60 * 60 * minimumAge))
-            return NSPredicate(format: "%K <= %@", #keyPath(Person.birthdate), maximumDate as CVarArg)
+            return .before(\Person.birthdate, date: maximumDate)
 
         case .personID(let personID):
-            return NSPredicate(format: "%K == %@", #keyPath(Person.personID), personID)
+            return .is(\Person.personID, value: personID)
         }
     }
 }

@@ -1,11 +1,9 @@
-import CoreData
 import Combine
+import CoreData
 
-/**
- # FetchableResultsPublishing
- Protocol for a publisher which vends up-to-date entities matching filter and sort criteria.
- Call `beginFetch()` and `endFetch()` to manage publisher life cycle.
- */
+/// # FetchableResultsPublishing
+/// Protocol for a publisher which vends up-to-date entities matching filter and sort criteria.
+/// Call `beginFetch()` and `endFetch()` to manage publisher life cycle.
 @MainActor
 public protocol FetchableResultsPublishing {
 
@@ -18,8 +16,7 @@ public protocol FetchableResultsPublishing {
     var sort: ResultType.Sort? { get set }
 
     /// Cache of last-known entities matching filter and sort
-    @MainActor
-    var fetchedObjects: [ResultType] { get }
+    @MainActor var fetchedObjects: [ResultType] { get }
 
     /// Publisher vending entities matching filter and sort
     var fetchedObjectsPublisher: any Publisher<[ResultType], Never> { get }

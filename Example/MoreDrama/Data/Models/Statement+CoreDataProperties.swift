@@ -4,6 +4,7 @@ import CoreData
 
 extension Statement {
 
+    @NSManaged public var statementID: String
     @NSManaged public var content: String
     @NSManaged public var time: Date
     @NSManaged public var by: Person
@@ -29,5 +30,7 @@ extension Statement {
 }
 
 extension Statement : Identifiable {
-
+    public var id: String {
+        statementID
+    }
 }
