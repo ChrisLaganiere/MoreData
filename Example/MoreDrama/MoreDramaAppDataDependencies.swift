@@ -34,14 +34,8 @@ extension MoreDramaAppDataDependencies {
     /// Configuration for production apps connecting to server
     static func `default`() -> MoreDramaAppDataDependencies {
 
-        let managedObjectModel = NSManagedObjectModel.mergedModel(
-            from: [Bundle(for: self)]
-        )!
-
         let persistenceController = try! CoreDataPersistenceController(
-            config: .defaultURL,
-            name: "AmbientRecordingApp",
-            managedObjectModel: managedObjectModel
+            name: "AmbientRecordingApp"
         )
 
         return MoreDramaAppDataDependencies(
@@ -52,14 +46,9 @@ extension MoreDramaAppDataDependencies {
     /// Configuration for production apps connecting to server
     static func preview() -> MoreDramaAppDataDependencies {
 
-        let managedObjectModel = NSManagedObjectModel.mergedModel(
-            from: [Bundle(for: self)]
-        )!
-
         let persistenceController = try! CoreDataPersistenceController(
-            config: .inMemory,
-            name: "AmbientRecordingApp-Preview",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .inMemory),
+            name: "AmbientRecordingApp-Preview"
         )
 
         return MoreDramaAppDataDependencies(

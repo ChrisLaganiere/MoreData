@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F54C9B62D34A500008BC215 /* MoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 3F54C9B52D34A500008BC215 /* MoreData */; };
 		831044552C6C21A1006C79EA /* MockDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831044542C6C21A1006C79EA /* MockDataGenerator.swift */; };
 		831044582C6C7C67006C79EA /* String+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831044572C6C7C67006C79EA /* String+Identifiable.swift */; };
-		831439FF2C9E8BB900DF75B2 /* MoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 831439FE2C9E8BB900DF75B2 /* MoreData */; };
 		8335A99D2C65C9450077EE3F /* Person+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A99C2C65C9450077EE3F /* Person+Filter.swift */; };
 		8335A99F2C65CA2B0077EE3F /* Person+Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A99E2C65CA2B0077EE3F /* Person+Sort.swift */; };
 		8335A9A12C6852860077EE3F /* Statement+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9A02C6852860077EE3F /* Statement+Filter.swift */; };
@@ -48,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F18057F2D34A3BD00BA8829 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		831044542C6C21A1006C79EA /* MockDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataGenerator.swift; sourceTree = "<group>"; };
 		831044572C6C7C67006C79EA /* String+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Identifiable.swift"; sourceTree = "<group>"; };
 		8335A99C2C65C9450077EE3F /* Person+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+Filter.swift"; sourceTree = "<group>"; };
@@ -79,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				831439FF2C9E8BB900DF75B2 /* MoreData in Frameworks */,
+				3F54C9B62D34A500008BC215 /* MoreData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +223,7 @@
 		83BA34602C65B7250044A149 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F18057F2D34A3BD00BA8829 /* Package.swift */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -244,6 +246,7 @@
 			name = MoreDrama;
 			packageProductDependencies = (
 				831439FE2C9E8BB900DF75B2 /* MoreData */,
+				3F54C9B52D34A500008BC215 /* MoreData */,
 			);
 			productName = MoreDrama;
 			productReference = 83BA342B2C65B2C40044A149 /* MoreDrama.app */;
@@ -318,7 +321,7 @@
 			);
 			mainGroup = 83BA34222C65B2C40044A149;
 			packageReferences = (
-				831439FD2C9E8BB900DF75B2 /* XCLocalSwiftPackageReference "../../MoreData3" */,
+				3F54C9B42D34A500008BC215 /* XCLocalSwiftPackageReference "../../MoreData" */,
 			);
 			productRefGroup = 83BA342C2C65B2C40044A149 /* Products */;
 			projectDirPath = "";
@@ -708,13 +711,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		831439FD2C9E8BB900DF75B2 /* XCLocalSwiftPackageReference "../../MoreData3" */ = {
+		3F54C9B42D34A500008BC215 /* XCLocalSwiftPackageReference "../../MoreData" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../MoreData3;
+			relativePath = ../../MoreData;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3F54C9B52D34A500008BC215 /* MoreData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MoreData;
+		};
 		831439FE2C9E8BB900DF75B2 /* MoreData */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MoreData;

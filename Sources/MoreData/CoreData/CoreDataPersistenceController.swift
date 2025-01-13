@@ -8,10 +8,17 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
 
     // MARK: Lifecycle
 
+    /**
+     - Parameter config: desired behavior of persistence controller
+     - Parameter managedObjectModel: schema for entities that will be saved to persistent store
+     - Parameter name: name of persistence controller, which distinguishes it from any other persistent stores, and is the default file name for SQLite backing file
+     */
     public init(
-        config: Configuration = .defaultURL,
-        name: String,
-        managedObjectModel: NSManagedObjectModel
+        config: Configuration = .default,
+        managedObjectModel: NSManagedObjectModel = NSManagedObjectModel.mergedModel(
+            from: [Bundle.main]
+        )!,
+        name: String
     ) throws {
         let container = NSPersistentContainer(
             name: name,
@@ -23,7 +30,7 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
             throw PersistenceControllerError.missingPersistentStoreDescription
         }
 
-        switch config {
+        switch config.persistenceType {
         case .inMemory:
             description.url = URL(fileURLWithPath: "/dev/null")
         case .url(let url):
@@ -69,7 +76,7 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
                 loadError = error
             }
 
-            // Configure contexts
+            // Configure contexts to automatically merge changes from background worker contexts
             self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         }
 
@@ -122,13 +129,24 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
 // MARK: - Definitions
 extension CoreDataPersistenceController {
     /// Configuration options for persistence controller
-    public enum Configuration {
-        /// In-memory only; do not persist
-        case inMemory
-        /// Persist at custom location, with file URL
-        case url(URL)
-        /// Persist at default app location
-        case defaultURL
+    public struct Configuration {
+        public enum PersistenceType {
+            /// In-memory only; do not persist
+            case inMemory
+            /// Persist at custom location, with file URL
+            case url(URL)
+            /// Persist at default app location
+            case defaultURL
+        }
+
+        public static let `default` = Self.init()
+
+        /// Whether and where to save persistent data
+        let persistenceType: PersistenceType
+
+        public init(persistenceType: PersistenceType = .defaultURL) {
+            self.persistenceType = persistenceType
+        }
     }
 
     /// Errors that can occur during persistence
