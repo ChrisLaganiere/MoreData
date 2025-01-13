@@ -3,7 +3,7 @@ import MoreData
 import SwiftUI
 
 /// Example app showing how to use `Fetchable` protocol! With hopefully an interesting, silly user
-/// experience too. It is a demonstration of simplicity: the whole app is less than 100 lines of code
+/// experience too. It is a demonstration of simplicity: the whole app is less than 100 lines of code!
 @MainActor
 @main
 struct MoreDramaApp: App {
