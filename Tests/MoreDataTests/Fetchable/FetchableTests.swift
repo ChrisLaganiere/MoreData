@@ -17,16 +17,16 @@ final class FetchableTests: XCTestCase {
 
     func testAllEntitiesFetch() throws {
         // Given
-        let entity1 = TestEntity(context: moc)
+        let entity1 = Person(context: moc)
         entity1.name = "Alice"
 
-        let entity2 = TestEntity(context: moc)
+        let entity2 = Person(context: moc)
         entity2.name = "Bob"
 
         try moc.save()
 
         // When
-        let fetchedEntities = try TestEntity.all(moc: moc)
+        let fetchedEntities = try Person.all(moc: moc)
 
         // Then
         XCTAssertEqual(fetchedEntities.count, 2)
@@ -36,14 +36,14 @@ final class FetchableTests: XCTestCase {
 
     func testFetchWithPredicate() throws {
         // Given
-        let entity = TestEntity(context: moc)
+        let entity = Person(context: moc)
         entity.name = "Alice"
 
         try moc.save()
 
         // When
         let predicate = NSPredicate(format: "name == %@", "Alice")
-        let fetchedEntities = try TestEntity.all(predicate: predicate, moc: moc)
+        let fetchedEntities = try Person.all(predicate: predicate, moc: moc)
 
         // Then
         XCTAssertEqual(fetchedEntities.count, 1)
@@ -52,19 +52,19 @@ final class FetchableTests: XCTestCase {
 
     func testFetchSortedByName() throws {
         // Given
-        let entity1 = TestEntity(context: moc)
+        let entity1 = Person(context: moc)
         entity1.name = "Charlie"
 
-        let entity2 = TestEntity(context: moc)
+        let entity2 = Person(context: moc)
         entity2.name = "Betty"
 
-        let entity3 = TestEntity(context: moc)
+        let entity3 = Person(context: moc)
         entity3.name = "Alice"
 
         try moc.save()
 
         // When
-        let sortedEntities = try TestEntity.all(
+        let sortedEntities = try Person.all(
             sortedBy: .nameAscending,
             moc: moc
         )
@@ -75,16 +75,16 @@ final class FetchableTests: XCTestCase {
 
     func testCountEntities() throws {
         // Given
-        let entity1 = TestEntity(context: moc)
+        let entity1 = Person(context: moc)
         entity1.name = "Alice"
 
-        let entity2 = TestEntity(context: moc)
+        let entity2 = Person(context: moc)
         entity2.name = "Bob"
 
         try moc.save()
 
         // When
-        let count = try TestEntity.count(moc: moc)
+        let count = try Person.count(moc: moc)
 
         // Then
         XCTAssertEqual(count, 2)
@@ -92,14 +92,14 @@ final class FetchableTests: XCTestCase {
 
     func testDeleteAllEntities() throws {
         // Given
-        let entity = TestEntity(context: moc)
+        let entity = Person(context: moc)
         entity.name = "Alice"
 
         try moc.save()
 
         // When
-        try TestEntity.deleteAll(moc: moc)
-        let remainingEntities = try TestEntity.all(moc: moc)
+        try Person.deleteAll(moc: moc)
+        let remainingEntities = try Person.all(moc: moc)
 
         // Then
         XCTAssertTrue(remainingEntities.isEmpty)
@@ -107,13 +107,13 @@ final class FetchableTests: XCTestCase {
 
     func testUniqueEntityFetch() throws {
         // Given
-        let entity = TestEntity(context: moc)
+        let entity = Person(context: moc)
         entity.name = "UniqueEntity"
 
         try moc.save()
 
         // When
-        let fetchedEntity = try TestEntity.unique(
+        let fetchedEntity = try Person.unique(
             predicate: NSPredicate(format: "name == %@", "UniqueEntity"),
             moc: moc
         )
@@ -125,16 +125,16 @@ final class FetchableTests: XCTestCase {
 
     func testUniqueEntityFetchTooManyResults() throws {
         // Given
-        let entity1 = TestEntity(context: moc)
+        let entity1 = Person(context: moc)
         entity1.name = "DuplicateEntity"
 
-        let entity2 = TestEntity(context: moc)
+        let entity2 = Person(context: moc)
         entity2.name = "DuplicateEntity"
 
         try moc.save()
 
         // When/Then
-        XCTAssertThrowsError(try TestEntity.unique(
+        XCTAssertThrowsError(try Person.unique(
             predicate: NSPredicate(format: "name == %@", "DuplicateEntity"),
             moc: moc
         )) { error in

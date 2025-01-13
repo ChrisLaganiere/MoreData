@@ -8,7 +8,7 @@ extension NSManagedObjectModel {
         // Person entity
         let personEntity = NSEntityDescription()
         personEntity.name = "Person"
-        personEntity.managedObjectClassName = "Person"
+        personEntity.managedObjectClassName = NSStringFromClass(Person.self)
 
         let nameAttribute = NSAttributeDescription()
         nameAttribute.name = "name"
@@ -17,15 +17,22 @@ extension NSManagedObjectModel {
 
         let ageAttribute = NSAttributeDescription()
         ageAttribute.name = "age"
-        ageAttribute.attributeType = .integer16AttributeType
+        ageAttribute.attributeType = .integer64AttributeType
+        ageAttribute.defaultValue = 0
         ageAttribute.isOptional = false
 
-        personEntity.properties = [nameAttribute, ageAttribute]
+        let isActiveAttribute = NSAttributeDescription()
+        isActiveAttribute.name = "isActive"
+        isActiveAttribute.attributeType = .booleanAttributeType
+        isActiveAttribute.isOptional = false
+        isActiveAttribute.defaultValue = true
+
+        personEntity.properties = [ageAttribute, isActiveAttribute, nameAttribute]
 
         // Address entity
         let addressEntity = NSEntityDescription()
         addressEntity.name = "Address"
-        addressEntity.managedObjectClassName = "Address"
+        addressEntity.managedObjectClassName = NSStringFromClass(Address.self)
 
         let streetAttribute = NSAttributeDescription()
         streetAttribute.name = "street"
