@@ -24,9 +24,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
 
     func testInitInMemoryConfiguration() throws {
         sut = try CoreDataPersistenceController(
-            config: .inMemory,
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .inMemory),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
 
         let storeDescription = sut.persistentContainer.persistentStoreDescriptions.first
@@ -36,9 +36,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
     func testInitWithCustomURLConfiguration() throws {
         let customURL = URL(fileURLWithPath: "/tmp/test.sqlite")
         sut = try CoreDataPersistenceController(
-            config: .url(customURL),
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .url(customURL)),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
 
         let storeDescription = sut.persistentContainer.persistentStoreDescriptions.first
@@ -47,9 +47,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
 
     func testInitWithDefaultURLConfiguration() throws {
         sut = try CoreDataPersistenceController(
-            config: .defaultURL,
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .defaultURL),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
 
         let storeDescription = sut.persistentContainer.persistentStoreDescriptions.first
@@ -60,9 +60,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
     @MainActor
     func testLoadPersistentStores() throws {
         sut = try CoreDataPersistenceController(
-            config: .inMemory,
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .inMemory),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
 
         XCTAssertNoThrow(try sut.load())
@@ -75,9 +75,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
         // Simulate a failure by providing an invalid URL
         let invalidURL = URL(fileURLWithPath: "/invalid/path/test.sqlite")
         sut = try CoreDataPersistenceController(
-            config: .url(invalidURL),
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .url(invalidURL)),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
 
         XCTAssertThrowsError(try sut.load(), "Loading should fail due to an invalid URL")
@@ -85,9 +85,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
 
     func testPerformBackgroundTask() throws {
         sut = try CoreDataPersistenceController(
-            config: .inMemory,
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .inMemory),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
         try sut.load()
 
@@ -103,9 +103,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
 
     func testNewBackgroundContextMergePolicy() throws {
         sut = try CoreDataPersistenceController(
-            config: .inMemory,
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .inMemory),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
 
         let backgroundContext = sut.newBackgroundContext(merge: .mergeByPropertyObjectTrumpMergePolicyType)
@@ -117,9 +117,9 @@ final class CoreDataPersistenceControllerTests: XCTestCase {
 
     func testPerformBackgroundTaskAsync() async throws {
         sut = try CoreDataPersistenceController(
-            config: .inMemory,
-            name: "TestModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .inMemory),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
         try sut.load()
 

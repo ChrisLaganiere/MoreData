@@ -14,13 +14,13 @@ final class FetchableResultsPublisherTests: XCTestCase {
         try super.setUpWithError()
 
         // Initialize the managed object model
-        let managedObjectModel = NSManagedObjectModel.makeTestEntityModel()
+        let managedObjectModel = NSManagedObjectModel.makeTestModel()
 
         // Initialize Core Data stack
         let controller = try CoreDataPersistenceController(
-            config: .inMemory,
-            name: "TestEntityModel",
-            managedObjectModel: managedObjectModel
+            config: .init(persistenceType: .inMemory),
+            managedObjectModel: managedObjectModel,
+            name: "MoreDataTests"
         )
         try controller.load()
         self.controller = controller
@@ -39,8 +39,8 @@ final class FetchableResultsPublisherTests: XCTestCase {
 
     // Helper to create a TestEntity
     @discardableResult
-    private func createTestEntity(name: String = "Alice", isActive: Bool = true) -> TestEntity {
-        let entity = TestEntity(context: moc)
+    private func createTestEntity(name: String = "Alice", isActive: Bool = true) -> Person {
+        let entity = Person(context: moc)
         entity.name = name
         entity.isActive = isActive
         return entity
@@ -49,7 +49,7 @@ final class FetchableResultsPublisherTests: XCTestCase {
     // MARK: Tests
 
     func testInitialization() {
-        let publisher = FetchableResultsPublisher<TestEntity>(
+        let publisher = FetchableResultsPublisher<Person>(
             filter: .nameContains("Alice"),
             sort: .nameAscending,
             moc: moc
@@ -66,7 +66,7 @@ final class FetchableResultsPublisherTests: XCTestCase {
         try moc.save()
 
         // Create publisher
-        let publisher = FetchableResultsPublisher<TestEntity>(
+        let publisher = FetchableResultsPublisher<Person>(
             filter: nil,
             sort: .nameAscending,
             moc: moc
@@ -94,7 +94,7 @@ final class FetchableResultsPublisherTests: XCTestCase {
         try moc.save()
 
         // Create publisher
-        let publisher = FetchableResultsPublisher<TestEntity>(
+        let publisher = FetchableResultsPublisher<Person>(
             filter: .nameContains("Alice"),
             sort: .nameAscending,
             moc: moc
@@ -139,7 +139,7 @@ final class FetchableResultsPublisherTests: XCTestCase {
         try moc.save()
 
         // Create publisher
-        let publisher = FetchableResultsPublisher<TestEntity>(
+        let publisher = FetchableResultsPublisher<Person>(
             filter: nil,
             sort: nil,
             moc: moc

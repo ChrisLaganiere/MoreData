@@ -8,11 +8,22 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
 
     // MARK: Lifecycle
 
+    /**
+     - Parameter config: desired behavior of persistence controller
+     - Parameter managedObjectModel: schema for entities that will be saved to persistent store
+     - Parameter name: name of persistence controller, which distinguishes it from any other persistent stores, and is the default file name for SQLite backing file
+     */
     public init(
-        config: Configuration = .defaultURL,
-        name: String,
-        managedObjectModel: NSManagedObjectModel
+        config: Configuration = .default,
+        managedObjectModel: NSManagedObjectModel? = nil,
+        name: String
     ) throws {
+        guard let managedObjectModel = managedObjectModel ?? NSManagedObjectModel.mergedModel(
+            from: [Bundle.main]
+        ) else {
+            throw CoreDataPersistenceControllerError.missingManagedObjectModel
+        }
+
         let container = NSPersistentContainer(
             name: name,
             managedObjectModel: managedObjectModel
@@ -20,10 +31,10 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
 
         // Configure store description
         guard let description = container.persistentStoreDescriptions.first else {
-            throw PersistenceControllerError.missingPersistentStoreDescription
+            throw CoreDataPersistenceControllerError.missingPersistentStoreDescription
         }
 
-        switch config {
+        switch config.persistenceType {
         case .inMemory:
             description.url = URL(fileURLWithPath: "/dev/null")
         case .url(let url):
@@ -69,7 +80,7 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
                 loadError = error
             }
 
-            // Configure contexts
+            // Configure contexts to automatically merge changes from background worker contexts
             self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         }
 
@@ -122,21 +133,38 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
 // MARK: - Definitions
 extension CoreDataPersistenceController {
     /// Configuration options for persistence controller
-    public enum Configuration {
-        /// In-memory only; do not persist
-        case inMemory
-        /// Persist at custom location, with file URL
-        case url(URL)
-        /// Persist at default app location
-        case defaultURL
+    public struct Configuration {
+        public enum PersistenceType {
+            /// In-memory only; do not persist
+            case inMemory
+            /// Persist at custom location, with file URL
+            case url(URL)
+            /// Persist at default app location
+            case defaultURL
+        }
+
+        public static let `default` = Self.init()
+
+        /// Whether and where to save persistent data
+        let persistenceType: PersistenceType
+
+        public init(persistenceType: PersistenceType = .defaultURL) {
+            self.persistenceType = persistenceType
+        }
     }
+}
 
-    /// Errors that can occur during persistence
-    public enum PersistenceControllerError: String, Error, CustomDebugStringConvertible {
-        case missingPersistentStoreDescription
+/// Errors that can occur during persistence controller setup
+public enum CoreDataPersistenceControllerError: String, Error, CustomDebugStringConvertible {
+    case missingManagedObjectModel
+    case missingPersistentStoreDescription
 
-        public var debugDescription: String {
-            rawValue
+    public var debugDescription: String {
+        switch self {
+        case .missingManagedObjectModel:
+            return "Missing managed object model. Typically this means you haven't added a managed object model to your project, or that the bundle provided to NSManagedObjectModel initializer is incorrect."
+        case .missingPersistentStoreDescription:
+            return "Missing persistent store description."
         }
     }
 }

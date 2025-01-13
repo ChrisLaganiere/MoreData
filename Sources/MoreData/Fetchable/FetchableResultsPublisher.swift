@@ -134,7 +134,7 @@ public class FetchableResultsPublisher<ResultType>: NSObject, NSFetchedResultsCo
 
     /// An array of the currently fetched entities, reflecting the latest data
     /// based on the applied filter and sort criteria.
-    @MainActor public var fetchedObjects: [ResultType] {
+    public var fetchedObjects: [ResultType] {
         return frc.fetchedObjects ?? []
     }
 

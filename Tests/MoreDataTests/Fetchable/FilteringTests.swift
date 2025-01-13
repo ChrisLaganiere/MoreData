@@ -6,13 +6,13 @@ final class FilteringTests: XCTestCase {
 
     func testAllFilters() {
         // Given
-        let filters: [TestEntityFilter] = [
+        let filters: [PersonFilter] = [
             .nameContains("Alice"),
             .isActive(true),
         ]
 
         // When
-        let allPredicate = TestEntityFilter.all(filters)
+        let allPredicate = PersonFilter.all(filters)
 
         // Then
         XCTAssertEqual(allPredicate.predicateFormat, "name CONTAINS \"Alice\" AND isActive == 1")
@@ -20,13 +20,13 @@ final class FilteringTests: XCTestCase {
 
     func testAnyFilters() {
         // Given
-        let filters: [TestEntityFilter] = [
+        let filters: [PersonFilter] = [
             .nameContains("Alice"),
             .isActive(true),
         ]
 
         // When
-        let anyPredicate = TestEntityFilter.any(filters)
+        let anyPredicate = PersonFilter.any(filters)
 
         // Then
         XCTAssertEqual(anyPredicate.predicateFormat, "name CONTAINS \"Alice\" OR isActive == 1")
@@ -34,10 +34,10 @@ final class FilteringTests: XCTestCase {
 
     func testByFilter() {
         // Given
-        let filter = TestEntityFilter.nameContains("Alice")
+        let filter = PersonFilter.nameContains("Alice")
 
         // When
-        let predicate = TestEntityFilter.by(filter)
+        let predicate = PersonFilter.by(filter)
 
         // Then
         XCTAssertEqual(predicate.predicateFormat, "name CONTAINS \"Alice\"")
@@ -45,10 +45,10 @@ final class FilteringTests: XCTestCase {
 
     func testNotFilter() {
         // Given
-        let filter = TestEntityFilter.isActive(true)
+        let filter = PersonFilter.isActive(true)
 
         // When
-        let notPredicate = TestEntityFilter.not(filter)
+        let notPredicate = PersonFilter.not(filter)
 
         // Then
         XCTAssertEqual(notPredicate.predicateFormat, "NOT isActive == 1")

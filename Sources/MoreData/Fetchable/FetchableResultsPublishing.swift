@@ -16,7 +16,7 @@ public protocol FetchableResultsPublishing {
     var sort: ResultType.Sort? { get set }
 
     /// Cache of last-known entities matching filter and sort
-    @MainActor var fetchedObjects: [ResultType] { get }
+    var fetchedObjects: [ResultType] { get }
 
     /// Publisher vending entities matching filter and sort
     var fetchedObjectsPublisher: any Publisher<[ResultType], Never> { get }

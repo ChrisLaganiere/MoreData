@@ -13,6 +13,13 @@ public protocol Fetchable: NSManagedObject {
     static var entityName: String { get }
 }
 
+// MARK: - Defaults
+extension Fetchable {
+    public static var entityName: String {
+        String(describing: Self.self)
+    }
+}
+
 // MARK: - Helpers
 extension Fetchable {
 
