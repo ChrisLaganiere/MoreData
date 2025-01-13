@@ -35,8 +35,4 @@ class Person: NSManagedObject, Fetchable {
     @NSManaged var age: Int
     @NSManaged var name: String
     @NSManaged var isActive: Bool
-
-    // MARK: Relationships
-
-    @NSManaged var address: Address?
 }
