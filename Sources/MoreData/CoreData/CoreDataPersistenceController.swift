@@ -15,11 +15,15 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
      */
     public init(
         config: Configuration = .default,
-        managedObjectModel: NSManagedObjectModel = NSManagedObjectModel.mergedModel(
-            from: [Bundle.main]
-        )!,
+        managedObjectModel: NSManagedObjectModel? = nil,
         name: String
     ) throws {
+        guard let managedObjectModel = managedObjectModel ?? NSManagedObjectModel.mergedModel(
+            from: [Bundle.main]
+        ) else {
+            throw CoreDataPersistenceControllerError.missingManagedObjectModel
+        }
+
         let container = NSPersistentContainer(
             name: name,
             managedObjectModel: managedObjectModel
@@ -27,7 +31,7 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
 
         // Configure store description
         guard let description = container.persistentStoreDescriptions.first else {
-            throw PersistenceControllerError.missingPersistentStoreDescription
+            throw CoreDataPersistenceControllerError.missingPersistentStoreDescription
         }
 
         switch config.persistenceType {
@@ -148,13 +152,19 @@ extension CoreDataPersistenceController {
             self.persistenceType = persistenceType
         }
     }
+}
 
-    /// Errors that can occur during persistence
-    public enum PersistenceControllerError: String, Error, CustomDebugStringConvertible {
-        case missingPersistentStoreDescription
+/// Errors that can occur during persistence controller setup
+public enum CoreDataPersistenceControllerError: String, Error, CustomDebugStringConvertible {
+    case missingManagedObjectModel
+    case missingPersistentStoreDescription
 
-        public var debugDescription: String {
-            rawValue
+    public var debugDescription: String {
+        switch self {
+        case .missingManagedObjectModel:
+            return "Missing managed object model. Typically this means you haven't added a managed object model to your project, or that the bundle provided to NSManagedObjectModel initializer is incorrect."
+        case .missingPersistentStoreDescription:
+            return "Missing persistent store description."
         }
     }
 }
