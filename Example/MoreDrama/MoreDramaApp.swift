@@ -45,11 +45,11 @@ struct ContentView: View {
             List {
                 ForEach(statements) { statement in
                     HStack {
-                        Image(statement.by.avatarFileName, bundle: nil).resizable().frame(width: 36, height: 36)
+                        Image(statement.by?.avatarFileName ?? "", bundle: nil).resizable().frame(width: 36, height: 36)
                         if let searchQuery {
-                            Text(.init("\(statement.content.replacingOccurrences(of: searchQuery, with: "**\(searchQuery)**"))")).padding(8)
+                            Text(.init("\(statement.content?.replacingOccurrences(of: searchQuery, with: "**\(searchQuery)**") ?? "")")).padding(8)
                         } else {
-                            Text(statement.content).padding(8)
+                            Text(statement.content ?? "").padding(8)
                         }
                     }
                 }
@@ -66,8 +66,8 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu { ForEach(persons) { person in
-                        Button(action: { filterForPerson(person.id) }) {
-                            Label(person.name, systemImage: person.id == selectedPersonID ? "person.fill" : "person")
+                        Button(action: { filterForPerson(person.personID ?? "") }) {
+                            Label(person.name ?? "", systemImage: person.personID == selectedPersonID ? "person.fill" : "person")
                         }
                     } } label: {
                         Label("People", systemImage: selectedPersonID == nil ? "person.circle" : "person.circle.fill")

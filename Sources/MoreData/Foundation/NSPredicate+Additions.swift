@@ -7,19 +7,27 @@ extension NSPredicate {
 
     // MARK: Strings and other objects
 
-    public static func `is`<T: CVarArg>(_ keyPath: KeyPath<some Any, T>, value: T) -> NSPredicate {
-        NSPredicate(format: "%K == %@", NSExpression(forKeyPath: keyPath).keyPath, value)
+    public static func `is`<T>(_ keyPath: KeyPath<some Any, T?>, value: T?) -> NSPredicate where T: CVarArg {
+        if let value = value {
+            return NSPredicate(format: "%K == %@", NSExpression(forKeyPath: keyPath).keyPath, value)
+        } else {
+            return NSPredicate(format: "%K == nil", NSExpression(forKeyPath: keyPath).keyPath)
+        }
     }
 
-    public static func isNot<T: CVarArg>(_ keyPath: KeyPath<some Any, T>, value: T) -> NSPredicate {
-        NSPredicate(format: "%K != %@", NSExpression(forKeyPath: keyPath).keyPath, value)
+    public static func isNot<T>(_ keyPath: KeyPath<some Any, T?>, value: T?) -> NSPredicate where T: CVarArg {
+        if let value = value {
+            return NSPredicate(format: "%K != %@", NSExpression(forKeyPath: keyPath).keyPath, value)
+        } else {
+            return NSPredicate(format: "%K != nil", NSExpression(forKeyPath: keyPath).keyPath)
+        }
     }
 
-    public static func isNil<T>(_ keyPath: KeyPath<some Any, T>) -> NSPredicate {
+    public static func isNil<T>(_ keyPath: KeyPath<some Any, T?>) -> NSPredicate {
         NSPredicate(format: "%K == nil", NSExpression(forKeyPath: keyPath).keyPath)
     }
 
-    public static func isNotNil<T>(_ keyPath: KeyPath<some Any, T>) -> NSPredicate {
+    public static func isNotNil<T>(_ keyPath: KeyPath<some Any, T?>) -> NSPredicate {
         NSPredicate(format: "%K != nil", NSExpression(forKeyPath: keyPath).keyPath)
     }
 
@@ -115,15 +123,15 @@ extension NSPredicate {
 
     // MARK: Dates
 
-    public static func before(_ keyPath: KeyPath<some Any, Date>, date: Date) -> NSPredicate {
+    public static func before(_ keyPath: KeyPath<some Any, Date?>, date: Date) -> NSPredicate {
         NSPredicate(format: "%K < %@", NSExpression(forKeyPath: keyPath).keyPath, date as NSDate)
     }
 
-    public static func after(_ keyPath: KeyPath<some Any, Date>, date: Date) -> NSPredicate {
+    public static func after(_ keyPath: KeyPath<some Any, Date?>, date: Date) -> NSPredicate {
         NSPredicate(format: "%K > %@", NSExpression(forKeyPath: keyPath).keyPath, date as NSDate)
     }
 
-    public static func between(_ keyPath: KeyPath<some Any, Date>, startDate: Date, endDate: Date) -> NSPredicate {
+    public static func between(_ keyPath: KeyPath<some Any, Date?>, startDate: Date, endDate: Date) -> NSPredicate {
         NSPredicate(format: "%K BETWEEN {%@, %@}", NSExpression(forKeyPath: keyPath).keyPath, startDate as NSDate, endDate as NSDate)
     }
 
