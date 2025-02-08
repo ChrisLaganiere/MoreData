@@ -45,12 +45,8 @@ struct ContentView: View {
             List {
                 ForEach(statements) { statement in
                     HStack {
-                        Image(statement.by?.avatarFileName ?? "", bundle: nil).resizable().frame(width: 36, height: 36)
-                        if let searchQuery {
-                            Text(.init("\(statement.content?.replacingOccurrences(of: searchQuery, with: "**\(searchQuery)**") ?? "")")).padding(8)
-                        } else {
-                            Text(statement.content ?? "").padding(8)
-                        }
+                        Image(statement.thumbnailFileName, bundle: nil).resizable().frame(width: 36, height: 36)
+                        Text(.init(statement.formattedContent(searchQuery: searchQuery))).padding(8)
                     }
                 }
             }
@@ -58,39 +54,43 @@ struct ContentView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu { ForEach(["new job", "new relationship", "new pet"]) { drama in
                         Button(action: { filterForDrama(drama) }) {
-                            Label(drama, systemImage: searchQuery == drama ? "flame.fill" : "flame")
+                            Label(drama, systemImage: (searchQuery == drama) ? "flame.fill" : "flame")
                         }
                     } } label: {
-                        Label("Search", systemImage: searchQuery == nil ? "flame.circle" : "flame.circle.fill")
+                        Label("Search", systemImage: (searchQuery == nil) ? "flame.circle" : "flame.circle.fill")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu { ForEach(persons) { person in
-                        Button(action: { filterForPerson(person.personID ?? "") }) {
-                            Label(person.name ?? "", systemImage: person.personID == selectedPersonID ? "person.fill" : "person")
+                        Button(action: { filterForPerson(person.personID) }) {
+                            Label(person.name ?? "Unknown Name", systemImage: (person.personID == selectedPersonID) ? "person.fill" : "person")
                         }
                     } } label: {
-                        Label("People", systemImage: selectedPersonID == nil ? "person.circle" : "person.circle.fill")
+                        Label("People", systemImage: (selectedPersonID == nil) ? "person.circle" : "person.circle.fill")
                     }
                 }
             }
-            .refreshable { try? Statement.deleteAll(moc: viewContext) }
+            .refreshable { clearFilter() }
         }
     }
 
     func filterForDrama(_ drama: String) {
-        if searchQuery == drama { searchQuery = nil }
-        else { searchQuery = drama }
-        updateFilter()
+        searchQuery = (searchQuery == drama) ? nil : drama
+        updateGossipQuery()
     }
 
-    func filterForPerson(_ personID: String) {
-        if selectedPersonID == personID { selectedPersonID = nil }
-        else { selectedPersonID = personID }
-        updateFilter()
+    func filterForPerson(_ personID: String?) {
+        selectedPersonID = (selectedPersonID == personID) ? nil : personID
+        updateGossipQuery()
     }
 
-    func updateFilter() {
+    func clearFilter() {
+        selectedPersonID = nil
+        searchQuery = nil
+        updateGossipQuery()
+    }
+
+    func updateGossipQuery() {
         _statements.filter = .all([
             selectedPersonID.flatMap { .toldBy($0, in: persons) },
             searchQuery.flatMap { .contains($0) }

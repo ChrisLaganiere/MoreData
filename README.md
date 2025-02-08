@@ -1,4 +1,4 @@
-# MoreData
+# More Data
 
 [![Swift](https://img.shields.io/badge/Swift-5.5%2B-orange.svg)](https://swift.org)
 [![Platforms](https://img.shields.io/badge/iOS-15.0%2B-blue.svg)](https://developer.apple.com/ios/)
@@ -10,15 +10,15 @@
 
 Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency.
 
-**MoreData** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and not Swift-native. This collection of protocols and utilities simplify fetching, filtering, and observing Core Data entities using a more reactive and Swift-friendly approach.
+**More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and not Swift-native. This collection of protocols and utilities simplify fetching, filtering, and observing Core Data entities using a more reactive and Swift-friendly approach.
 
 ## Features
 
-- **Filtering**: Simplify the creation and combination of `NSPredicate` objects used to specify filter criteria.
-- **Sorting**: Simplify the creation and combination of `NSSortDescriptor` objects for sorting query results.
-- **@FetchableRequest Property Wrapper**: A better way to power SwiftUI views backed by Core Data.
 - **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using Combine.
-- **CoreDataPersistenceController**: Wrapper for boilerplate Core Data setup, providing easy initialization for common patterns.
+- **Filtering**: Swift enums simplify the creation and combination of `NSPredicate` objects used to specify filter criteria.
+- **Sorting**: Swift enums simplify the creation and combination of `NSSortDescriptor` objects for sorting query results.
+- **@FetchableRequest Property Wrapper**: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
+- **CoreDataPersistenceController**: Wrapper for boilerplate Core Data setup, providing easy initialization for recommended best practices.
 
 ## Installation
 
@@ -36,7 +36,7 @@ dependencies: [
 
 #### Example App
 
-Included in [`/Example`](./Example) is a sample app, **More Drama**, which makes use of Core Data via this library to save lots of data... Specifically, lots of gossip! Additionally, there are filters by person and by topic, so you can find the hot news! The core of this sample app is implemented in less than 100 lines of code, showing the power and simplicity of **MoreData**.
+Included in [`/Example`](./Example) is a sample app showing best practices across the data layer of an app. This one is called **More Drama**! It makes use of **Core Data** and _**More Data**_ for a common and fairly complicated use case... Displaying, filtering, sorting, and persisting items in an entity graph, with relationships. Specifically, relationships between some wild gossipers! The app UI layer of this sample app is implemented in less than 100 lines of code, showing the power and simplicity of **Core Data + More Data**.
 
 | <img src="https://github.com/user-attachments/assets/6b23818e-dbc8-4fc5-b6e8-fd3f1ddc5b3b" width=300 /> | <img src="https://github.com/user-attachments/assets/aa570a69-bd99-4f0c-a33a-01c0c3ab9f14" width=300 /> |
 | --- | --- |
@@ -44,6 +44,22 @@ Included in [`/Example`](./Example) is a sample app, **More Drama**, which makes
 ### Fetchable Protocol
 
 The `Fetchable` protocol simplifies the process of fetching Core Data entities. Conform your NSManagedObject subclasses to Fetchable and use the provided helper methods to perform fetches.
+
+Making a predicate is such a pain with vanilla Core Data:
+```swift
+// Performing a search of `Person` records
+let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
+fetchRequest.predicate = predicate
+let sortDescriptor = NSSortDescriptor(keyPath: \Person.name, ascending: true)
+fetchRequest.sortDescriptors = [sortDescriptor]
+let results = try moc.fetch(fetchRequest)
+```
+
+So much easier with some wrappers bridging to modern Swift using More Data:
+```swift
+let results = try Person.all(matching: .nameContains("Kyle"), sortedBy: .name, moc: moc)
+```
 
 #### Example
 

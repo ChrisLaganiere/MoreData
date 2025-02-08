@@ -1,6 +1,10 @@
 import CoreData
 import MoreData
 
+extension Statement {
+    public typealias Sort = StatementSort
+}
+
 /// Sort descriptors which specify how to sort fetched results
 public enum StatementSort: Sorting {
 

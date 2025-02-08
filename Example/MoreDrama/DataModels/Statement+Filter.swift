@@ -2,6 +2,10 @@ import CoreData
 import MoreData
 import SwiftUI
 
+extension Statement {
+    public typealias Filter = StatementFilter
+}
+
 /// Filters which specify particular entities to fetch
 public enum StatementFilter: Filtering {
 

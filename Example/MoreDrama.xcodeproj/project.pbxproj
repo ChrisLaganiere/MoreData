@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3F54C9B62D34A500008BC215 /* MoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 3F54C9B52D34A500008BC215 /* MoreData */; };
-		831044552C6C21A1006C79EA /* MockDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831044542C6C21A1006C79EA /* MockDataGenerator.swift */; };
+		831044552C6C21A1006C79EA /* GossipGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831044542C6C21A1006C79EA /* GossipGenerator.swift */; };
 		831044582C6C7C67006C79EA /* String+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831044572C6C7C67006C79EA /* String+Identifiable.swift */; };
 		831B8C112D57F57D007A34A7 /* MoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 831439FE2C9E8BB900DF75B2 /* MoreData */; };
 		8335A99D2C65C9450077EE3F /* Person+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A99C2C65C9450077EE3F /* Person+Filter.swift */; };
@@ -17,6 +17,7 @@
 		8335A9A32C68528D0077EE3F /* Statement+Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9A22C68528D0077EE3F /* Statement+Sort.swift */; };
 		8335A9A52C6853260077EE3F /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9A42C6853260077EE3F /* Person.swift */; };
 		8335A9A72C6853630077EE3F /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8335A9A62C6853630077EE3F /* Statement.swift */; };
+		8383090B2D58121A00B5967D /* Statement+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8383090A2D58121800B5967D /* Statement+Display.swift */; };
 		83BA34332C65B2C50044A149 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83BA34322C65B2C50044A149 /* Assets.xcassets */; };
 		83BA34362C65B2C50044A149 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83BA34352C65B2C50044A149 /* Preview Assets.xcassets */; };
 		83BA343B2C65B2C50044A149 /* MoreDrama.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 83BA34392C65B2C50044A149 /* MoreDrama.xcdatamodeld */; };
@@ -46,7 +47,7 @@
 
 /* Begin PBXFileReference section */
 		3F18057F2D34A3BD00BA8829 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
-		831044542C6C21A1006C79EA /* MockDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataGenerator.swift; sourceTree = "<group>"; };
+		831044542C6C21A1006C79EA /* GossipGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GossipGenerator.swift; sourceTree = "<group>"; };
 		831044572C6C7C67006C79EA /* String+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Identifiable.swift"; sourceTree = "<group>"; };
 		8335A99C2C65C9450077EE3F /* Person+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+Filter.swift"; sourceTree = "<group>"; };
 		8335A99E2C65CA2B0077EE3F /* Person+Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+Sort.swift"; sourceTree = "<group>"; };
@@ -54,6 +55,7 @@
 		8335A9A22C68528D0077EE3F /* Statement+Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Statement+Sort.swift"; sourceTree = "<group>"; };
 		8335A9A42C6853260077EE3F /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		8335A9A62C6853630077EE3F /* Statement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statement.swift; sourceTree = "<group>"; };
+		8383090A2D58121800B5967D /* Statement+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Statement+Display.swift"; sourceTree = "<group>"; };
 		83A189012C69C29A00646C38 /* MoreDrama.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MoreDrama.xctestplan; sourceTree = "<group>"; };
 		83BA342B2C65B2C40044A149 /* MoreDrama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoreDrama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83BA34322C65B2C50044A149 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -95,14 +97,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		831044532C6C2198006C79EA /* MockDataGenerator */ = {
-			isa = PBXGroup;
-			children = (
-				831044542C6C21A1006C79EA /* MockDataGenerator.swift */,
-			);
-			path = MockDataGenerator;
-			sourceTree = "<group>";
-		};
 		831044562C6C7C5B006C79EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,34 +105,26 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		8310445B2C6C80E0006C79EA /* Services */ = {
+		8310445B2C6C80E0006C79EA /* DataServices */ = {
 			isa = PBXGroup;
 			children = (
-				831044532C6C2198006C79EA /* MockDataGenerator */,
+				831044542C6C21A1006C79EA /* GossipGenerator.swift */,
 			);
-			path = Services;
+			path = DataServices;
 			sourceTree = "<group>";
 		};
-		8335A98E2C65C6FD0077EE3F /* Models */ = {
+		8335A98E2C65C6FD0077EE3F /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
 				8335A9A42C6853260077EE3F /* Person.swift */,
 				8335A99C2C65C9450077EE3F /* Person+Filter.swift */,
 				8335A99E2C65CA2B0077EE3F /* Person+Sort.swift */,
 				8335A9A62C6853630077EE3F /* Statement.swift */,
+				8383090A2D58121800B5967D /* Statement+Display.swift */,
 				8335A9A02C6852860077EE3F /* Statement+Filter.swift */,
 				8335A9A22C68528D0077EE3F /* Statement+Sort.swift */,
 			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		8335A98F2C65C7090077EE3F /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				8310445B2C6C80E0006C79EA /* Services */,
-				8335A98E2C65C6FD0077EE3F /* Models */,
-			);
-			path = Data;
+			path = DataModels;
 			sourceTree = "<group>";
 		};
 		8335A9902C65C72B0077EE3F /* Resources */ = {
@@ -176,7 +162,8 @@
 		83BA342D2C65B2C40044A149 /* MoreDrama */ = {
 			isa = PBXGroup;
 			children = (
-				8335A98F2C65C7090077EE3F /* Data */,
+				8335A98E2C65C6FD0077EE3F /* DataModels */,
+				8310445B2C6C80E0006C79EA /* DataServices */,
 				831044562C6C7C5B006C79EA /* Extensions */,
 				8335A9902C65C72B0077EE3F /* Resources */,
 				83EC57C12D0659C800B9B4C0 /* MoreDramaApp.swift */,
@@ -360,7 +347,8 @@
 				8335A9A32C68528D0077EE3F /* Statement+Sort.swift in Sources */,
 				8335A9A72C6853630077EE3F /* Statement.swift in Sources */,
 				8335A9A52C6853260077EE3F /* Person.swift in Sources */,
-				831044552C6C21A1006C79EA /* MockDataGenerator.swift in Sources */,
+				8383090B2D58121A00B5967D /* Statement+Display.swift in Sources */,
+				831044552C6C21A1006C79EA /* GossipGenerator.swift in Sources */,
 				831044582C6C7C67006C79EA /* String+Identifiable.swift in Sources */,
 				8335A9A12C6852860077EE3F /* Statement+Filter.swift in Sources */,
 				8335A99F2C65CA2B0077EE3F /* Person+Sort.swift in Sources */,
