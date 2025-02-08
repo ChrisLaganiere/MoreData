@@ -38,7 +38,7 @@ struct ContentView: View {
     private var statements: FetchedResults<Statement>
 
     @State private var selectedPersonID: String?
-    @State private var searchQuery: String?
+    @State private var statementSearchSubstring: String?
 
     var body: some View {
         NavigationView {
@@ -46,18 +46,18 @@ struct ContentView: View {
                 ForEach(statements) { statement in
                     HStack {
                         Image(statement.thumbnailFileName, bundle: nil).resizable().frame(width: 36, height: 36)
-                        Text(.init(statement.formattedContent(searchQuery: searchQuery))).padding(8)
+                        Text(.init(statement.formattedContent(searchQuery: statementSearchSubstring))).padding(8)
                     }
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu { ForEach(["new job", "new relationship", "new pet"]) { drama in
-                        Button(action: { filterForDrama(drama) }) {
-                            Label(drama, systemImage: (searchQuery == drama) ? "flame.fill" : "flame")
+                        Button(action: { filterBySubstring(drama) }) {
+                            Label(drama, systemImage: (statementSearchSubstring == drama) ? "flame.fill" : "flame")
                         }
                     } } label: {
-                        Label("Search", systemImage: (searchQuery == nil) ? "flame.circle" : "flame.circle.fill")
+                        Label("Search", systemImage: (statementSearchSubstring == nil) ? "flame.circle" : "flame.circle.fill")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -74,8 +74,8 @@ struct ContentView: View {
         }
     }
 
-    func filterForDrama(_ drama: String) {
-        searchQuery = (searchQuery == drama) ? nil : drama
+    func filterBySubstring(_ substring: String) {
+        statementSearchSubstring = (statementSearchSubstring == substring) ? nil : substring
         updateGossipQuery()
     }
 
@@ -86,14 +86,14 @@ struct ContentView: View {
 
     func clearFilter() {
         selectedPersonID = nil
-        searchQuery = nil
+        statementSearchSubstring = nil
         updateGossipQuery()
     }
 
     func updateGossipQuery() {
         _statements.filter = .all([
             selectedPersonID.flatMap { .toldBy($0, in: persons) },
-            searchQuery.flatMap { .contains($0) }
+            statementSearchSubstring.flatMap { .statementContains($0) }
         ].compactMap { $0 })
     }
 }
