@@ -89,6 +89,10 @@ The `Filtering` protocol allows you to define reusable and composable filters to
 #### Example of Filtering protocol implementation
 
 ```swift
+extension Person {
+    typealias Filter = PersonFilter
+}
+
 enum PersonFilter: Filtering {
     case nameContains(String)
     case ageGreaterThan(Int)
@@ -114,6 +118,10 @@ The `Sorting` protocol allows you to define Swift-friendly sort criteria to repl
 #### Example of Sorting protocol implementation
 
 ```swift
+extension Person {
+    typealias Sort = PersonSort
+}
+
 enum PersonSort: Sorting {
     /// Sort alphabetically, A-Z
     case nameAscending(Bool)
