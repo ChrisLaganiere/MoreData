@@ -41,9 +41,13 @@ Included in [`/Example`](./Example) is a sample app showing best practices acros
 | <img src="https://github.com/user-attachments/assets/6b23818e-dbc8-4fc5-b6e8-fd3f1ddc5b3b" width=300 /> | <img src="https://github.com/user-attachments/assets/aa570a69-bd99-4f0c-a33a-01c0c3ab9f14" width=300 /> |
 | --- | --- |
 
+The More Data package contains several components:
+
 ### Fetchable Protocol
 
-The `Fetchable` protocol simplifies the process of fetching Core Data entities. Conform your NSManagedObject subclasses to Fetchable and use the provided helper methods to perform fetches.
+`Fetchable` allows composable, declarative fetch requests with Core Data entities.
+
+To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclasses to `Fetchable` protocol. You can then use all the provided helpers methods to perform easy, composable, declarative fetch requests.
 
 Making a predicate is such a pain with vanilla Core Data:
 ```swift
@@ -92,7 +96,7 @@ let kyles = try? Person.all(predicate: NSPredicate(format: "%K CONTAINS[cd] %@",
 
 ### Filtering Protocol
 
-The `Filtering` protocol allows you to define reusable and composable filters for Core Data queries.
+The `Filtering` protocol allows you to define reusable and composable filters for Core Data queries. Consider making an enum with available filtering options.
 
 #### Example
 
@@ -117,7 +121,7 @@ let kyles = try? Person.all(matching: kylesFilter, moc: moc)
 
 ### Sorting Protocol
 
-The `Sorting` protocol allows you to define Swift-friendly sort criteria for Core Data fetch results.
+The `Sorting` protocol allows you to define Swift-friendly sort criteria for Core Data fetch results. Consider making an enum with available sort options.
 
 #### Example
 
@@ -139,7 +143,9 @@ let kyles = try? Person.all(matching: .nameContains("Kyle"), sortedBy: .nameAsce
 
 ### FetchableResultsPublisher
 
-The `FetchableResultsPublisher` class provides a Combine-based interface to fetch and observe Core Data entities, making it easy to integrate with SwiftUI or other reactive UI frameworks.
+A solution is provided further below provided for powering SwiftUI views using a simple property wrapper, but sometimes you need to integrate data flows with other components in your app. A Combine publisher is included which wraps Core Data's  
+
+`FetchableResultsPublisher` provides a Combine publisher interface to make simple, composable, long-running fetched results streams for Core Data entities, making it easy to integrate with view models, with `@MainActor` services, or with UI frameworks like TCA.
 
 #### Example
 
@@ -154,9 +160,14 @@ let kylePublisher = FetchableResultsPublisher<Person>(
     moc: moc
 )
 
+// You may want to store cancellable handles to publishers as an instance property in whatever class/struct you are building.
+var cancellables: Set<AnyCancellable> = []
+
 kylePublisher.fetchedObjectsPublisher
     .sink { fetchedObjects in
-        // Update your UI with the fetched objects
+        // Update your UI, or do anything you want, on the main thread, with the fetched objects.
+        // This block continues to get called with any changes when any items matching the fetch
+        // request are created, updated, or deleted in the managed object context.
     }
     .store(in: &cancellables)
 ```
