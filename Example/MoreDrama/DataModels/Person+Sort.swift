@@ -1,6 +1,10 @@
 import CoreData
 import MoreData
 
+extension Person {
+    public typealias Sort = PersonSort
+}
+
 /// Sort descriptors which specify how to sort fetched results
 public enum PersonSort: Sorting {
 

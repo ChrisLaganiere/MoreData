@@ -1,4 +1,4 @@
-# MoreData
+# More Data
 
 [![Swift](https://img.shields.io/badge/Swift-5.5%2B-orange.svg)](https://swift.org)
 [![Platforms](https://img.shields.io/badge/iOS-15.0%2B-blue.svg)](https://developer.apple.com/ios/)
@@ -10,15 +10,15 @@
 
 Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency.
 
-**MoreData** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and not Swift-native. This collection of protocols and utilities simplify fetching, filtering, and observing Core Data entities using a more reactive and Swift-friendly approach.
+**More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
 
 ## Features
 
-- **Filtering**: Simplify the creation and combination of `NSPredicate` objects used to specify filter criteria.
-- **Sorting**: Simplify the creation and combination of `NSSortDescriptor` objects for sorting query results.
-- **@FetchableRequest Property Wrapper**: A better way to power SwiftUI views backed by Core Data.
 - **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using Combine.
-- **CoreDataPersistenceController**: Wrapper for boilerplate Core Data setup, providing easy initialization for common patterns.
+- **Filtering**: Swift enums simplify the creation and combination of `NSPredicate` objects used to specify filter criteria.
+- **Sorting**: Swift enums simplify the creation and combination of `NSSortDescriptor` objects for sorting query results.
+- **@FetchableRequest Property Wrapper**: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
+- **CoreDataPersistenceController**: Wrapper for boilerplate Core Data setup, providing easy initialization for recommended best practices.
 
 ## Installation
 
@@ -36,14 +36,34 @@ dependencies: [
 
 #### Example App
 
-Included in [`/Example`](./Example) is a sample app, **More Drama**, which makes use of Core Data via this library to save lots of data... Specifically, lots of gossip! Additionally, there are filters by person and by topic, so you can find the hot news! The core of this sample app is implemented in less than 100 lines of code, showing the power and simplicity of **MoreData**.
+Included in [`/Example`](./Example) is a sample app showing best practices across the data layer of an app. This one is called **More Drama**! It makes use of **Core Data** and _**More Data**_ for a common and fairly complicated use case... Displaying, filtering, sorting, and persisting items in an entity graph, with relationships. Specifically, relationships between some wild gossipers! The app UI layer of this sample app is implemented in less than 100 lines of code, showing the power and simplicity of **Core Data + More Data**.
 
 | <img src="https://github.com/user-attachments/assets/6b23818e-dbc8-4fc5-b6e8-fd3f1ddc5b3b" width=300 /> | <img src="https://github.com/user-attachments/assets/aa570a69-bd99-4f0c-a33a-01c0c3ab9f14" width=300 /> |
 | --- | --- |
 
+The More Data package contains several components:
+
 ### Fetchable Protocol
 
-The `Fetchable` protocol simplifies the process of fetching Core Data entities. Conform your NSManagedObject subclasses to Fetchable and use the provided helper methods to perform fetches.
+`Fetchable` allows composable, declarative fetch requests with Core Data entities.
+
+To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclasses to `Fetchable` protocol. You can then use all the provided helpers methods to perform easy, composable, declarative fetch requests.
+
+Making a predicate is such a pain with vanilla Core Data:
+```swift
+// Performing a search of `Person` records
+let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
+fetchRequest.predicate = predicate
+let sortDescriptor = NSSortDescriptor(keyPath: \Person.name, ascending: true)
+fetchRequest.sortDescriptors = [sortDescriptor]
+let results = try moc.fetch(fetchRequest)
+```
+
+So much easier with some wrappers bridging to modern Swift using More Data:
+```swift
+let results = try Person.all(matching: .nameContains("Kyle"), sortedBy: .name, moc: moc)
+```
 
 #### Example
 
@@ -54,29 +74,18 @@ import MoreData
 class Person: NSManagedObject {
     @NSManaged var name: String?
     @NSManaged var age: Int
-
-    static var entityName: String {
-        return "Person"
-    }
 }
 
 // MARK: Fetchable
-extension Person: Fetchable {
-    typealias Filter = PersonFilter
-    typealias Sort = PersonSort
+extension Person: Fetchable { }
 
-    static var entityName: String {
-        "Person"
-    }
-}
-
-let moc: NSManagedObjectContext = // your managed object context
+// This gets even better -- we'll set up nicer sort and filter types to replace the NSPredicate below
 let kyles = try? Person.all(predicate: NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle"), moc: moc)
 ```
 
 ### Filtering Protocol
 
-The `Filtering` protocol allows you to define reusable and composable filters for Core Data queries.
+The `Filtering` protocol allows you to define reusable and composable filters to replace `NSPredicate` for Core Data queries in your app code. Consider making an enum with available filtering options.
 
 #### Example
 
@@ -88,9 +97,9 @@ enum PersonFilter: Filtering {
     var predicate: NSPredicate {
         switch self {
         case .nameContains(let name):
-            return .contains(\Person.name, substring: name)
+            return .contains(\Person.name, substring: name) // `NSPredicate` helper included in More Data
         case .ageGreaterThan(let age):
-            return .greaterThanOrEqualTo(\Person.age, value: 25)
+            return .greaterThanOrEqualTo(\Person.age, value: 25) // `NSPredicate` helper included in More Data
         }
     }
 }
@@ -101,7 +110,7 @@ let kyles = try? Person.all(matching: kylesFilter, moc: moc)
 
 ### Sorting Protocol
 
-The `Sorting` protocol allows you to define Swift-friendly sort criteria for Core Data fetch results.
+The `Sorting` protocol allows you to define Swift-friendly sort criteria to replace `NSSortDescriptor` for Core Data query results in your app code. Consider making an enum with available sort options.
 
 #### Example
 
@@ -123,7 +132,9 @@ let kyles = try? Person.all(matching: .nameContains("Kyle"), sortedBy: .nameAsce
 
 ### FetchableResultsPublisher
 
-The `FetchableResultsPublisher` class provides a Combine-based interface to fetch and observe Core Data entities, making it easy to integrate with SwiftUI or other reactive UI frameworks.
+`FetchableResultsPublisher` provides a Combine publisher interface on fetch results to make simple, composable, long-running Core Data query streams. This makes it easy to integrate data flows in view models, with `@MainActor` services, or with UI frameworks like TCA.
+
+An even easier solution to power your views is provided further below provided with a SwiftUI property wrapper, but sometimes you need to integrate data flows with other components in your app. `FetchableResultsPublisher` is good for this.
 
 #### Example
 
@@ -138,16 +149,29 @@ let kylePublisher = FetchableResultsPublisher<Person>(
     moc: moc
 )
 
+// You may want to store cancellable handles to publishers as an instance property in whatever class/struct you are building.
+var cancellables: Set<AnyCancellable> = []
+
 kylePublisher.fetchedObjectsPublisher
     .sink { fetchedObjects in
-        // Update your UI with the fetched objects
+        // Update your UI, or do anything you want, on the main thread, with the fetched objects.
+        // This block continues to get called with any changes when any items matching the fetch
+        // request are created, updated, or deleted in the managed object context.
     }
     .store(in: &cancellables)
+    
+// Start up publisher to observe for changes matching fetch request
+kylePublisher.beginFetch()
+
+// ...later, pause publisher and stop observing
+kylePublisher.endFetch()
 ```
 
 ### @FetchableRequest Property Wrapper
 
-The `@FetchableRequest` property wrapper simplifies the process of retrieving and observing `NSManagedObject` entities that conform to the `Fetchable` protocol within SwiftUI views. It provides a declarative interface for fetching Core Data entities while integrating seamlessly with SwiftUI's state-driven UI updates.
+Use this if you have a simple SwiftUI view and just want to display data. If your use case is that simple, you can use managed object fetch results directly to provide data in your view builders.
+
+`@FetchableRequest` property wrapper provides fetch results of `NSManagedObject` entities conforming to `Fetchable` protocol directly within SwiftUI views. It is similar to the Core Data property wrapper `@FetchRequest`, but provides a more declarative interface for the same goal of fetching results from the app's entity graph seamlessly within SwiftUI views.
 
 Features
 * **Declarative Fetching**: Easily fetch entities based on filter and sort criteria directly within your SwiftUI views.
@@ -210,6 +234,6 @@ This project is licensed under the MIT License.
 
 ### Acknowledgements
 
-Written by: Chris L 🫎
+Created by Chris Laganiere with advice and lessons from greater developers.
 
 Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.

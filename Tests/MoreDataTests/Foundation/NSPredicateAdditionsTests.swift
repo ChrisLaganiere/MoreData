@@ -3,11 +3,11 @@ import XCTest
 class NSPredicateExtensionsTests: XCTestCase {
 
     final class TestObject: NSObject {
-        @objc var name: String
+        @objc var name: String?
         @objc var age: Int
         @objc var isActive: Bool
-        @objc var createdAt: Date
-        @objc var strings: NSSet
+        @objc var createdAt: Date?
+        @objc var strings: NSSet?
 
         init(
             name: String = "Shelster",

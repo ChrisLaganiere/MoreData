@@ -1,12 +1,15 @@
 import CoreData
 import MoreData
-import SwiftUI
+
+extension Statement {
+    public typealias Filter = StatementFilter
+}
 
 /// Filters which specify particular entities to fetch
 public enum StatementFilter: Filtering {
 
     /// Look up subtext
-    case contains(String)
+    case statementContains(String)
 
     /// relation to particular individual
     case toldBy(Person)
@@ -19,7 +22,7 @@ public enum StatementFilter: Filtering {
     public var predicate: NSPredicate {
         switch self {
 
-        case .contains(let query):
+        case .statementContains(let query):
             return .contains(\Statement.content, substring: query, caseInsensitive: true)
 
         case .toldBy(let person):
@@ -37,7 +40,7 @@ public enum StatementFilter: Filtering {
     }
 
     /// Helper for cases where you don't have person records indexed
-    static func toldBy(_ personID: String, in people: FetchedResults<Person>) -> StatementFilter {
+    static func toldBy(_ personID: String, in people: any Collection<Person>) -> StatementFilter {
         guard let person = people.first(where: { $0.personID == personID }) else {
             return .noElements
         }

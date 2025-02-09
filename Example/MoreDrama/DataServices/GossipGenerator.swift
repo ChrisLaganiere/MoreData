@@ -3,7 +3,7 @@ import MoreData
 
 /// Silly helper class which fills in database with a stream of sample data!
 @MainActor
-final class MockDataGenerator {
+final class GossipGenerator {
 
     private let persistenceController: CoreDataPersistenceController
 

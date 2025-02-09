@@ -1,6 +1,10 @@
 import CoreData
 import MoreData
 
+extension Person {
+    public typealias Filter = PersonFilter
+}
+
 /// Filters which specify particular entities to fetch
 public enum PersonFilter: Filtering {
 

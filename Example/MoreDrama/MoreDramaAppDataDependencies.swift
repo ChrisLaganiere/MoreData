@@ -9,17 +9,17 @@ final class MoreDramaAppDataDependencies {
     let persistenceController: CoreDataPersistenceController
 
     /// Generate sample data in db!
-    let mockDataGenerator: MockDataGenerator
+    let gossipGenerator: GossipGenerator
 
     init(persistenceController: CoreDataPersistenceController) {
         self.persistenceController = persistenceController
-        mockDataGenerator = .init(persistenceController: persistenceController)
+        gossipGenerator = .init(persistenceController: persistenceController)
     }
 
     /// Do initial set up as required for dependencies
     func setUp() throws {
         try persistenceController.load()
-        mockDataGenerator.startGenerating()
+        gossipGenerator.startGenerating()
     }
 }
 
@@ -28,8 +28,7 @@ extension MoreDramaAppDataDependencies {
 
     // Here is an easy spot to provide different configurations for the app.
     // You might set up different debug situations here by mocking out various
-    // services. Since they are all referenced by protocol, any part of the app
-    // can be mocked here for any purpose.
+    // services.
 
     /// Configuration for production apps connecting to server
     static func `default`() -> MoreDramaAppDataDependencies {
@@ -44,11 +43,11 @@ extension MoreDramaAppDataDependencies {
     }
 
     /// Configuration for production apps connecting to server
-    static func preview() -> MoreDramaAppDataDependencies {
+    static func inMemory() -> MoreDramaAppDataDependencies {
 
         let persistenceController = try! CoreDataPersistenceController(
             config: .init(persistenceType: .inMemory),
-            name: "AmbientRecordingApp-Preview"
+            name: "AmbientRecordingApp-InMemory"
         )
 
         return MoreDramaAppDataDependencies(
