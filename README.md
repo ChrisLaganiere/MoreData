@@ -74,29 +74,18 @@ import MoreData
 class Person: NSManagedObject {
     @NSManaged var name: String?
     @NSManaged var age: Int
-
-    static var entityName: String {
-        return "Person"
-    }
 }
 
 // MARK: Fetchable
-extension Person: Fetchable {
-    typealias Filter = PersonFilter
-    typealias Sort = PersonSort
+extension Person: Fetchable { }
 
-    static var entityName: String {
-        "Person"
-    }
-}
-
-let moc: NSManagedObjectContext = // your managed object context
+// This gets even better -- we'll set up nicer sort and filter types to replace the NSPredicate below
 let kyles = try? Person.all(predicate: NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle"), moc: moc)
 ```
 
 ### Filtering Protocol
 
-The `Filtering` protocol allows you to define reusable and composable filters for Core Data queries. Consider making an enum with available filtering options.
+The `Filtering` protocol allows you to define reusable and composable filters to replace `NSPredicate` for Core Data queries in your app code. Consider making an enum with available filtering options.
 
 #### Example
 
@@ -108,9 +97,9 @@ enum PersonFilter: Filtering {
     var predicate: NSPredicate {
         switch self {
         case .nameContains(let name):
-            return .contains(\Person.name, substring: name)
+            return .contains(\Person.name, substring: name) // `NSPredicate` helper included in More Data
         case .ageGreaterThan(let age):
-            return .greaterThanOrEqualTo(\Person.age, value: 25)
+            return .greaterThanOrEqualTo(\Person.age, value: 25) // `NSPredicate` helper included in More Data
         }
     }
 }
@@ -121,7 +110,7 @@ let kyles = try? Person.all(matching: kylesFilter, moc: moc)
 
 ### Sorting Protocol
 
-The `Sorting` protocol allows you to define Swift-friendly sort criteria for Core Data fetch results. Consider making an enum with available sort options.
+The `Sorting` protocol allows you to define Swift-friendly sort criteria to replace `NSSortDescriptor` for Core Data query results in your app code. Consider making an enum with available sort options.
 
 #### Example
 
@@ -141,11 +130,11 @@ enum PersonSort: Sorting {
 let kyles = try? Person.all(matching: .nameContains("Kyle"), sortedBy: .nameAscending, moc: moc)
 ```
 
-### FetchableResultsPublisher
+### FetchableResultsPublisher  
 
-A solution is provided further below provided for powering SwiftUI views using a simple property wrapper, but sometimes you need to integrate data flows with other components in your app. A Combine publisher is included which wraps Core Data's  
+`FetchableResultsPublisher` provides a Combine publisher interface on fetch results to make simple, composable, long-running Core Data query streams. This makes it easy to integrate data flows in view models, with `@MainActor` services, or with UI frameworks like TCA.
 
-`FetchableResultsPublisher` provides a Combine publisher interface to make simple, composable, long-running fetched results streams for Core Data entities, making it easy to integrate with view models, with `@MainActor` services, or with UI frameworks like TCA.
+An even easier solution to power your views is provided further below provided with a SwiftUI property wrapper, but sometimes you need to integrate data flows with other components in your app. `FetchableResultsPublisher` is good for this.
 
 #### Example
 
@@ -170,11 +159,19 @@ kylePublisher.fetchedObjectsPublisher
         // request are created, updated, or deleted in the managed object context.
     }
     .store(in: &cancellables)
+    
+// Start up publisher to observe for changes matching fetch request
+kylePublisher.beginFetch()
+
+// ...later, pause publisher and stop observing
+kylePublisher.endFetch()
 ```
 
 ### @FetchableRequest Property Wrapper
 
-The `@FetchableRequest` property wrapper simplifies the process of retrieving and observing `NSManagedObject` entities that conform to the `Fetchable` protocol within SwiftUI views. It provides a declarative interface for fetching Core Data entities while integrating seamlessly with SwiftUI's state-driven UI updates.
+Use this if you have a simple SwiftUI view and just want to display data. If your use case is that simple, you can use managed object fetch results directly to provide data in your view builders.
+
+`@FetchableRequest` property wrapper provides fetch results of `NSManagedObject` entities conforming to `Fetchable` protocol directly within SwiftUI views. It is similar to the Core Data property wrapper `@FetchRequest`, but provides a more declarative interface for the same goal of fetching results from the app's entity graph seamlessly within SwiftUI views.
 
 Features
 * **Declarative Fetching**: Easily fetch entities based on filter and sort criteria directly within your SwiftUI views.
@@ -237,6 +234,6 @@ This project is licensed under the MIT License.
 
 ### Acknowledgements
 
-Written by: Chris L 🫎
+Created by Chris Laganiere with advice and lessons from greater developers.
 
 Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
