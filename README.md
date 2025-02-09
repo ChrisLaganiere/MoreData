@@ -130,7 +130,7 @@ enum PersonSort: Sorting {
 let kyles = try? Person.all(matching: .nameContains("Kyle"), sortedBy: .nameAscending, moc: moc)
 ```
 
-### FetchableResultsPublisher  
+### FetchableResultsPublisher
 
 `FetchableResultsPublisher` provides a Combine publisher interface on fetch results to make simple, composable, long-running Core Data query streams. This makes it easy to integrate data flows in view models, with `@MainActor` services, or with UI frameworks like TCA.
 
