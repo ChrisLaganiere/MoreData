@@ -43,7 +43,7 @@ To use it, define `Sort` and `Filter` types for your entity class, implementing 
 
 Making a fetch request is such a pain with vanilla Core Data:
 ```swift
-// This is how you normally have to do it, very verbose and the predicate is not type-safe
+// This is how you normally have to do it, very verbose and the predicate is not type-safe ❌
 let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
 fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
 fetchRequest.sortDescriptors = [
