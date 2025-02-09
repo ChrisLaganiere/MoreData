@@ -12,14 +12,6 @@ Helpers for integrating Core Data with a modern app, using Swift enums, Combine 
 
 **More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
 
-## Features
-
-- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using Combine.
-- **Filtering**: Swift enums simplify the creation and combination of `NSPredicate` objects used to specify filter criteria.
-- **Sorting**: Swift enums simplify the creation and combination of `NSSortDescriptor` objects for sorting query results.
-- **@FetchableRequest Property Wrapper**: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
-- **CoreDataPersistenceController**: Wrapper for boilerplate Core Data setup, providing easy initialization for recommended best practices.
-
 ## Installation
 
 ### Swift Package Manager
@@ -32,26 +24,26 @@ dependencies: [
 ]
 ```
 
-## Usage
-
-#### Example App
-
-Included in [`/Example`](./Example) is a sample app showing best practices across the data layer of an app. This one is called **More Drama**! It makes use of **Core Data** and _**More Data**_ for a common and fairly complicated use case... Displaying, filtering, sorting, and persisting items in an entity graph, with relationships. Specifically, relationships between some wild gossipers! The app UI layer of this sample app is implemented in less than 100 lines of code, showing the power and simplicity of **Core Data + More Data**.
-
-| <img src="https://github.com/user-attachments/assets/6b23818e-dbc8-4fc5-b6e8-fd3f1ddc5b3b" width=300 /> | <img src="https://github.com/user-attachments/assets/aa570a69-bd99-4f0c-a33a-01c0c3ab9f14" width=300 /> |
-| --- | --- |
+## Contents
 
 The More Data package contains several components:
 
-### Fetchable Protocol
+- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
+- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
+- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
+- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
+- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
+- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
+
+### Fetchable
 
 `Fetchable` allows composable, declarative fetch requests with Core Data entities.
 
 To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclasses to `Fetchable` protocol. You can then use all the provided helpers methods to perform easy, composable, declarative fetch requests.
 
-Making a predicate is such a pain with vanilla Core Data:
+Making a fetch request is such a pain with vanilla Core Data:
 ```swift
-// Performing a search of `Person` records
+// This is how you normally have to do it, such a pain ❌
 let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
 let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
 fetchRequest.predicate = predicate
@@ -62,10 +54,15 @@ let results = try moc.fetch(fetchRequest)
 
 So much easier with some wrappers bridging to modern Swift using More Data:
 ```swift
-let results = try Person.all(matching: .nameContains("Kyle"), sortedBy: .name, moc: moc)
+// Same thing, much easier ✅
+let results = try Person.all(
+    matching: .nameContains("Kyle"),
+    sortedBy: .name,
+    moc: moc
+)
 ```
 
-#### Example
+#### Example Fetchable protocol implementation
 
 ```swift
 import CoreData
@@ -83,11 +80,11 @@ extension Person: Fetchable { }
 let kyles = try? Person.all(predicate: NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle"), moc: moc)
 ```
 
-### Filtering Protocol
+### Filtering
 
 The `Filtering` protocol allows you to define reusable and composable filters to replace `NSPredicate` for Core Data queries in your app code. Consider making an enum with available filtering options.
 
-#### Example
+#### Example of Filtering protocol implementation
 
 ```swift
 enum PersonFilter: Filtering {
@@ -108,11 +105,11 @@ let kylesFilter = PersonFilter.nameContains("Kyle")
 let kyles = try? Person.all(matching: kylesFilter, moc: moc)
 ```
 
-### Sorting Protocol
+### Sorting
 
 The `Sorting` protocol allows you to define Swift-friendly sort criteria to replace `NSSortDescriptor` for Core Data query results in your app code. Consider making an enum with available sort options.
 
-#### Example
+#### Example of Sorting protocol implementation
 
 ```swift
 enum PersonSort: Sorting {
@@ -136,7 +133,7 @@ let kyles = try? Person.all(matching: .nameContains("Kyle"), sortedBy: .nameAsce
 
 An even easier solution to power your views is provided further below provided with a SwiftUI property wrapper, but sometimes you need to integrate data flows with other components in your app. `FetchableResultsPublisher` is good for this.
 
-#### Example
+#### Example of FetchableResultsPublisher usage
 
 ```swift
 import Combine
@@ -178,7 +175,7 @@ Features
 * **Reactive Updates**: Automatically updates your view when the underlying Core Data changes.
 * **Dynamic Querying**: Modify filter and sort criteria dynamically, and the results will update automatically.
 
-#### Usage
+#### Example of @FetchableRequest property wrapper usage
 To use `@FetchableRequest`, simply declare it in your SwiftUI view, specifying the entity type, filter, and sort criteria. The fetched results will be automatically available to your view.
 
 ```swift
@@ -222,6 +219,13 @@ struct PersonListView: View {
 ```
 
 In this example, the list dynamically updates based on the toggle state, switching between showing all people or only people named Kyle.
+
+### Example App
+
+Included in [`/Example`](./Example) is a sample app showing best practices across the data layer of an app. This one is called **More Drama**! It makes use of **Core Data** and _**More Data**_ for a common and fairly complicated use case... Displaying, filtering, sorting, and persisting items in an entity graph, with relationships. Specifically, relationships between some wild gossipers! The app UI layer of this sample app is implemented in less than 100 lines of code, showing the power and simplicity of **Core Data + More Data**.
+
+| <img src="https://github.com/user-attachments/assets/6b23818e-dbc8-4fc5-b6e8-fd3f1ddc5b3b" width=300 /> | <img src="https://github.com/user-attachments/assets/aa570a69-bd99-4f0c-a33a-01c0c3ab9f14" width=300 /> |
+| --- | --- |
 
 ### Background
 
