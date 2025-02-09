@@ -39,16 +39,17 @@ The More Data package contains several components:
 
 `Fetchable` allows composable, declarative fetch requests with Core Data entities.
 
-To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclasses to `Fetchable` protocol. You can then use all the provided helpers methods to perform easy, composable, declarative fetch requests.
+To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclass to the `Fetchable` protocol. You will get, as a result, static helper methods to perform easy, composable, declarative fetch requests.
 
 Making a fetch request is such a pain with vanilla Core Data:
 ```swift
-// This is how you normally have to do it, such a pain ❌
+// This is how you normally have to do it, very verbose and the predicate is not type-safe
 let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
-let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
-fetchRequest.predicate = predicate
-let sortDescriptor = NSSortDescriptor(keyPath: \Person.name, ascending: true)
-fetchRequest.sortDescriptors = [sortDescriptor]
+fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
+fetchRequest.sortDescriptors = [
+    NSSortDescriptor(keyPath: \Person.name, ascending: true)
+]
+fetchRequest.fetchLimit = 10
 let results = try moc.fetch(fetchRequest)
 ```
 
@@ -58,6 +59,7 @@ So much easier with some wrappers bridging to modern Swift using More Data:
 let results = try Person.all(
     matching: .nameContains("Kyle"),
     sortedBy: .name,
+    fetchLimit: 10,
     moc: moc
 )
 ```

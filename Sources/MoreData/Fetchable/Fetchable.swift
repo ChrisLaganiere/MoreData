@@ -27,11 +27,17 @@ extension Fetchable {
     public static func all(
         predicate: NSPredicate? = nil,
         sortDescriptors: [NSSortDescriptor] = [],
+        fetchLimit: Int? = nil,
+        fetchOffset: Int? = nil,
         moc: NSManagedObjectContext
     ) throws
         -> [Self]
     {
-        let fetchRequest = fetchRequest(predicate: predicate)
+        let fetchRequest = fetchRequest(
+            predicate: predicate,
+            fetchLimit: fetchLimit,
+            fetchOffset: fetchOffset
+        )
         fetchRequest.sortDescriptors = sortDescriptors
         return try moc.fetch(fetchRequest)
     }
@@ -41,6 +47,8 @@ extension Fetchable {
     public static func all(
         matching filter: Filter? = nil,
         sortedBy sort: Sort? = nil,
+        fetchLimit: Int? = nil,
+        fetchOffset: Int? = nil,
         moc: NSManagedObjectContext
     ) throws
         -> [Self]
@@ -48,6 +56,8 @@ extension Fetchable {
         try all(
             predicate: filter?.predicate,
             sortDescriptors: sort?.sortDescriptors ?? [],
+            fetchLimit: fetchLimit,
+            fetchOffset: fetchOffset,
             moc: moc
         )
     }
