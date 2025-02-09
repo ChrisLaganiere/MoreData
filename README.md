@@ -10,7 +10,7 @@
 
 Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency.
 
-**More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and not Swift-native. This collection of protocols and utilities simplify fetching, filtering, and observing Core Data entities using a more reactive and Swift-friendly approach.
+**More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
 
 ## Features
 
