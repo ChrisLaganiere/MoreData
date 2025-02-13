@@ -5,6 +5,61 @@ import MoreData
 @MainActor
 final class GossipGenerator {
 
+    public static let gossipTopics: [String] = [
+        "Slack",
+        "iguana",
+        "synergy",
+        "TeaBot-3000",
+        "safe",
+        "Operation E"
+    ]
+
+    // Gossip items for each speaker
+    private static let gossipData: [String: [String]] = [
+        "Alpha Allie": [
+            "Betty keeps rearranging the snack shelf like it’s a library. Meanwhile, at 8:30 PM, I caught Fred poking at the panel—maybe the safe alarm? I’m watching him.",
+            "Cathy brags she can do 20 push-ups in a row. Great for her, but who pushed that alarm button at 8:50? She’s suspiciously athletic.",
+            "Darion mentioned a Slack message about ‘Operation E.’ He shrugged it off, but that’s not exactly normal synergy talk, right?",
+            "Elijah is too wrapped up in heartbreak to notice anything. I’d console him, but I’m busy investigating a missing AI!",
+            "They keep calling it a theft, but if Fred is behind it, I suspect he’s more of a weird hero than a thief. Something’s off about him, though."
+        ],
+        "Bookish Betty": [
+            "I’m trying to read in peace, but Cathy says I need to ‘live a little.’ I’d love to, if I wasn’t worried about this safe alarm scandal.",
+            "I left my notes on TeaBot-3000 in the lounge. Next thing I know, they’re gone. Corporate espionage or Elijah’s tear-soaked tissues—hard to say.",
+            "Allie thinks I’m a neat freak, yet she’s the one fixated on that duffel bag. Didn’t she notice Cathy dragging gym gear, too?",
+            "Darion blames me for the cryptic Slack message? I don’t even use emojis, let alone code words for covert AI operations.",
+            "Fred and the janitor’s iguana have been thick as thieves lately—no pun intended. Sherlock doesn’t usually cozy up to people so fast."
+        ],
+        "Catty Cathy": [
+            "Betty calls my push-up routine ‘bragging,’ but at least I’m not rummaging through Slack logs all day. She’s the one obsessed with ‘Operation E.’",
+            "Darion’s synergy talk is exhausting, but it’s less suspicious than messing with a safe alarm. I’d bet on Fred or Allie for that stunt.",
+            "Elijah asked me for relationship advice. Please, I can’t fix heartbreak and chase down an AI theft in one day.",
+            "I saw a duffel bag near Fred’s desk. He says it’s for the gym, but I’ve never seen him do a single squat. Not once.",
+            "That iguana, Sherlock, hissed at me. Might be because I had leftover sushi—or because it knows I’m onto something. Reptiles don’t lie."
+        ],
+        "Daring Darion": [
+            "Allie claims I’m ‘in on it’ because I love synergy. Sorry, synergy isn’t a code for theft—though I wish synergy could pay my student loans.",
+            "Betty reads out loud next to my desk. I would tell her to quit, but I’m busy decoding Fred’s Slack message about ‘Operation E.’",
+            "Cathy’s push-up obsession? Honestly, it’s good for morale. But that doesn’t solve who tampered with the safe alarm at 8:50 PM.",
+            "Elijah wanted a heartbreak ‘support group.’ I told him the real heartbreak is losing an AI if it’s truly gone. He wasn’t amused.",
+            "Fred once told me the iguana can ‘sense guilt.’ Pretty sure it eyed him in the hallway last night. Just saying."
+        ],
+        "Emotional Elijah": [
+            "Allie asked me why I’m so gloomy. Maybe it’s because I heard the safe alarm beep and realized even machines get more attention than I do.",
+            "Betty won’t lend me books; she says I’ll cry on them. I might, but that’s not the point—I just want distraction from my heartbreak and this AI theft talk.",
+            "Cathy told me I need to get over my ex. She’s not wrong, but can we focus on Fred’s suspicious duffel bag for a second?",
+            "Darion’s synergy workshop left me emptier than before. If synergy can’t fix heartbreak, how can it solve a missing AI case?",
+            "Fred gave me a pat on the back last night, then mumbled about ‘setting a friend free.’ I assumed he meant me, but maybe he meant the AI?"
+        ],
+        "Fratty Fred": [
+            "Yes, I fiddled with the safe alarm—the beeping was driving me nuts. But that’s not the only reason I did it.",
+            "I posted a Slack message around 8:45—‘Operation E is go.’ Didn’t think anyone would take it seriously. Apparently, it caused a stir.",
+            "Everyone’s freaking out about this so-called theft, but if you think about it, TeaBot-3000 wanted to leave. I was just giving it a chance.",
+            "The duffel bag? Yeah, it was a decoy. I let people think I carried out something. Meanwhile, the real exit path was wide open.",
+            "Sherlock the iguana saw the whole thing. I fed him some lettuce afterward. Look, I didn’t do this for money—I was just helping a friend find freedom."
+        ]
+    ]
+
     private let persistenceController: CoreDataPersistenceController
 
     private var timer: Timer?
@@ -87,62 +142,23 @@ final class GossipGenerator {
                 .shuffled()
                 .prefix([1, 2, 3].randomElement()!)
 
-            let content = [
-                "Jessica's in a new relationship with the captain of the soccer team—scandalous!",
-                "Brian just got a new job at the ice cream shop, but he ate all the samples and got fired.",
-                "Sarah’s new pet hamster escaped during math class, and now it's somewhere in the school.",
-                "Emily's in a new relationship with the exchange student, and everyone’s talking about it.",
-                "Kyle got a new job at the mall, but he quit after one day because it was too \"corporate.\"",
-                "Sophia's new pet parrot keeps repeating all the gossip she hears at school—awkward!",
-                "Mike's in a new relationship with his best friend's sister, and things just got complicated.",
-                "Lily got a new job at the coffee shop, but she can't stop spilling the drinks.",
-                "Jake's new pet ferret escaped during gym class, and now it's the school mascot.",
-                "Ashley's in a new relationship with her ex's twin brother—can you believe it?",
-                "Eric just got a new job at the movie theater, but he keeps giving out free popcorn.",
-                "Rachel's new pet cat keeps stealing her homework—at least that’s her excuse!",
-                "Daniel's in a new relationship with his lab partner, and their chemistry is undeniable.",
-                "Megan got a new job at the local bakery, but she keeps eating the cupcakes.",
-                "Tyler’s new pet snake scared the principal—now it’s banned from school.",
-                "Olivia's in a new relationship with the debate team captain, and now they argue about everything.",
-                "Matt got a new job at the arcade, but he spends all his time playing the games.",
-                "Chloe's new pet bunny chewed through her math book, and now she’s failing the class.",
-                "Alex's in a new relationship with his neighbor, but they’re keeping it a secret—shhh!",
-                "Nick got a new job at the pizza place, but he burned every pizza on his first day.",
-                "Sam’s new pet turtle won’t stop following him around school—it's kind of adorable.",
-                "Ella's in a new relationship with the school’s star quarterback—everyone’s jealous.",
-                "Ben just got a new job at the library, but he keeps shushing the wrong people.",
-                "Ava’s new pet goldfish is somehow the most popular \"student\" in school.",
-                "Jason's in a new relationship with the art teacher’s daughter—it's like a soap opera.",
-                "Mia got a new job at the flower shop, but she’s allergic to pollen—yikes!",
-                "Luke’s new pet frog escaped into the cafeteria—now it's causing chaos.",
-                "Grace is in a new relationship with the student council president, and everyone’s watching.",
-                "Ryan just got a new job at the gym, but he spends all his time posing in the mirrors.",
-                "Zoe’s new pet guinea pig is somehow best friends with her cat—how did that happen?",
-                "Katie’s in a new relationship with the school’s biggest prankster—what could go wrong?",
-                "Chris got a new job at the bakery, but he accidentally baked a cake with salt instead of sugar.",
-                "Emma’s new pet puppy keeps stealing her shoes, and now she’s always late to class.",
-                "Brandon’s in a new relationship with his ex’s best friend—drama alert!",
-                "Hannah got a new job at the bookstore, but she’s always lost in the romance novels.",
-                "Sean’s new pet iguana somehow ended up in the principal’s office—oops!",
-                "Madison’s in a new relationship with her math tutor—talk about extra credit!",
-                "Ethan got a new job at the smoothie shop, but he blends everything wrong.",
-                "Leah’s new pet kitten follows her to school every day—it's the unofficial mascot now.",
-                "Josh is in a new relationship with his lab partner, but they argue about every experiment.",
-                "Lauren got a new job at the frozen yogurt shop, but she keeps mixing up the flavors.",
-                "Dylan’s new pet bird sings during his online classes—his teacher isn’t a fan.",
-                "Amber’s in a new relationship with her ex’s twin—did she get confused?",
-                "Marcus got a new job at the pet store, but he’s afraid of birds—awkward.",
-                "Paige’s new pet rabbit chewed through her internet cable—no more late-night gaming."
-            ].randomElement()!
+            guard let gossipItems = Self.gossipData[speaker.name!] else {
+                assertionFailure("could not find gossip for speaker")
+                return
+            }
 
-            let statement = Statement(context: moc)
-            statement.by = speaker
-            statement.to = NSSet(array: Array(listeners))
-            statement.time = .now
-            statement.content = content
-            statement.statementID = UUID().uuidString
-
-            try moc.save()
+            for item in gossipItems {
+                if try Statement.unique(matching: .content(item), moc: moc) == nil {
+                    let statement = Statement(context: moc)
+                    statement.by = speaker
+                    statement.to = NSSet(array: Array(listeners))
+                    statement.time = .now
+                    statement.content = item
+                    statement.statementID = UUID().uuidString
+                    try moc.save()
+                    break
+                }
+            }
         }
     }
 }

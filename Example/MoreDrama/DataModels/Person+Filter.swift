@@ -16,6 +16,9 @@ public enum PersonFilter: Filtering {
     /// particular individual
     case personID(String)
 
+    /// name
+    case name(String)
+
     public var predicate: NSPredicate {
         switch self {
 
@@ -29,6 +32,9 @@ public enum PersonFilter: Filtering {
 
         case .personID(let personID):
             return .is(\Person.personID, value: personID)
+
+        case .name(let name):
+            return .is(\Person.name, value: name)
         }
     }
 }
