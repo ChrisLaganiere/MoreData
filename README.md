@@ -8,7 +8,14 @@
 [![Platforms](https://img.shields.io/badge/visionOS-1.0%2B-blue.svg)](https://developer.apple.com/visionos/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 
-Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency.
+Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency. Includes:
+
+- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
+- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
+- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
+- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
+- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
+- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
 
 **More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
 
@@ -25,15 +32,6 @@ dependencies: [
 ```
 
 ## Contents
-
-The More Data package contains several components:
-
-- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
-- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
-- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
-- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
-- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
-- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
 
 ### Fetchable
 

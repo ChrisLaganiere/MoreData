@@ -113,20 +113,18 @@ public final class CoreDataPersistenceController: CoreDataPersisting {
         return backgroundContext
     }
 
-    // MARK: Internal
+    // MARK: Private Properties
 
     /// Shared writer moc where write changes to store are serialized in a private worker queue.
     /// Write changes are serialized to avoid merge conflicts:
     /// https://stackoverflow.com/a/45206964
-    lazy var backgroundWriteMoc = newBackgroundContext()
-
-    // MARK: Private Properties
+    private lazy var backgroundWriteMoc = newBackgroundContext()
 
     /// Manager with responsibilities that cover fetching and saving entities in Core Data
-    let persistentContainer: NSPersistentContainer
+    private let persistentContainer: NSPersistentContainer
 
     /// Schema for entities that can live in persistent container.
-    let managedObjectModel: NSManagedObjectModel
+    private let managedObjectModel: NSManagedObjectModel
 
 }
 
