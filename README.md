@@ -17,6 +17,11 @@ Helpers for integrating Core Data with a modern app, using Swift enums, Combine 
 - **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
 - **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
 
+Hopefully these will help you to follow best practices, including:
+* Read data for views with reactive streams on the main thread
+* Process data on a background thread
+* Query with type safe enum and associated values
+
 **More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
 
 ## Installation
