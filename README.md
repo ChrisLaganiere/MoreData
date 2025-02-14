@@ -8,7 +8,19 @@
 [![Platforms](https://img.shields.io/badge/visionOS-1.0%2B-blue.svg)](https://developer.apple.com/visionos/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 
-Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency.
+Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency. Includes:
+
+- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
+- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
+- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
+- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
+- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
+- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
+
+Hopefully these will help you to follow best practices, including:
+* Read data for views with reactive streams on the main thread
+* Process data on a background thread
+* Query with type safe enum and associated values
 
 **More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
 
@@ -26,29 +38,21 @@ dependencies: [
 
 ## Contents
 
-The More Data package contains several components:
-
-- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
-- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
-- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
-- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
-- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
-- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
-
 ### Fetchable
 
 `Fetchable` allows composable, declarative fetch requests with Core Data entities.
 
-To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclasses to `Fetchable` protocol. You can then use all the provided helpers methods to perform easy, composable, declarative fetch requests.
+To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclass to the `Fetchable` protocol. You will get, as a result, static helper methods to perform easy, composable, declarative fetch requests.
 
 Making a fetch request is such a pain with vanilla Core Data:
 ```swift
-// This is how you normally have to do it, such a pain ❌
+// This is how you normally have to do it, very verbose and the predicate is not type-safe ❌
 let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
-let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
-fetchRequest.predicate = predicate
-let sortDescriptor = NSSortDescriptor(keyPath: \Person.name, ascending: true)
-fetchRequest.sortDescriptors = [sortDescriptor]
+fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
+fetchRequest.sortDescriptors = [
+    NSSortDescriptor(keyPath: \Person.name, ascending: true)
+]
+fetchRequest.fetchLimit = 10
 let results = try moc.fetch(fetchRequest)
 ```
 
@@ -58,6 +62,7 @@ So much easier with some wrappers bridging to modern Swift using More Data:
 let results = try Person.all(
     matching: .nameContains("Kyle"),
     sortedBy: .name,
+    fetchLimit: 10,
     moc: moc
 )
 ```
@@ -87,6 +92,10 @@ The `Filtering` protocol allows you to define reusable and composable filters to
 #### Example of Filtering protocol implementation
 
 ```swift
+extension Person {
+    typealias Filter = PersonFilter
+}
+
 enum PersonFilter: Filtering {
     case nameContains(String)
     case ageGreaterThan(Int)
@@ -112,6 +121,10 @@ The `Sorting` protocol allows you to define Swift-friendly sort criteria to repl
 #### Example of Sorting protocol implementation
 
 ```swift
+extension Person {
+    typealias Sort = PersonSort
+}
+
 enum PersonSort: Sorting {
     /// Sort alphabetically, A-Z
     case nameAscending(Bool)

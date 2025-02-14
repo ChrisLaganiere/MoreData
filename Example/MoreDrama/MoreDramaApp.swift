@@ -25,6 +25,15 @@ struct MoreDramaApp: App {
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
+    /// Example showing how vanilla @FetchRequest is prone to runtime errors
+//    @FetchRequest(
+//        sortDescriptors: [
+//            NSSortDescriptor(keyPath: \Person.birthdate, ascending: false),
+//        ],
+//        predicate: NSPredicate(format: "%K == %K", #keyPath(Person.name), "Fratty Fred")
+//    )
+//    private var persons: FetchedResults<Person>
+
     @FetchableRequest(
         entity: Person.self,
         filter: .none,
@@ -52,7 +61,7 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu { ForEach(["new job", "new relationship", "new pet"]) { drama in
+                    Menu { ForEach(GossipGenerator.gossipTopics) { drama in
                         Button(action: { filterBySubstring(drama) }) {
                             Label(drama, systemImage: (statementSearchSubstring == drama) ? "flame.fill" : "flame")
                         }

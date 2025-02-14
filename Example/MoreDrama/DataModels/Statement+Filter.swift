@@ -8,6 +8,9 @@ extension Statement {
 /// Filters which specify particular entities to fetch
 public enum StatementFilter: Filtering {
 
+    /// Matching content
+    case content(String)
+
     /// Look up subtext
     case statementContains(String)
 
@@ -21,6 +24,9 @@ public enum StatementFilter: Filtering {
 
     public var predicate: NSPredicate {
         switch self {
+
+        case .content(let content):
+            return .is(\Statement.content, value: content)
 
         case .statementContains(let query):
             return .contains(\Statement.content, substring: query, caseInsensitive: true)
