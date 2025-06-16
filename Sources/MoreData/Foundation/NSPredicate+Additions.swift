@@ -131,12 +131,24 @@ extension NSPredicate {
 
     // MARK: Dates
 
+    public static func before(_ keyPath: KeyPath<some Any, Date>, date: Date) -> NSPredicate {
+        NSPredicate(format: "%K < %@", NSExpression(forKeyPath: keyPath).keyPath, date as NSDate)
+    }
+
     public static func before(_ keyPath: KeyPath<some Any, Date?>, date: Date) -> NSPredicate {
         NSPredicate(format: "%K < %@", NSExpression(forKeyPath: keyPath).keyPath, date as NSDate)
     }
 
+    public static func after(_ keyPath: KeyPath<some Any, Date>, date: Date) -> NSPredicate {
+        NSPredicate(format: "%K > %@", NSExpression(forKeyPath: keyPath).keyPath, date as NSDate)
+    }
+
     public static func after(_ keyPath: KeyPath<some Any, Date?>, date: Date) -> NSPredicate {
         NSPredicate(format: "%K > %@", NSExpression(forKeyPath: keyPath).keyPath, date as NSDate)
+    }
+
+    public static func between(_ keyPath: KeyPath<some Any, Date>, startDate: Date, endDate: Date) -> NSPredicate {
+        NSPredicate(format: "%K BETWEEN {%@, %@}", NSExpression(forKeyPath: keyPath).keyPath, startDate as NSDate, endDate as NSDate)
     }
 
     public static func between(_ keyPath: KeyPath<some Any, Date?>, startDate: Date, endDate: Date) -> NSPredicate {
