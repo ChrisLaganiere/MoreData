@@ -8,39 +8,13 @@
 [![Platforms](https://img.shields.io/badge/visionOS-1.0%2B-blue.svg)](https://developer.apple.com/visionos/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 
-Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency. Includes:
+Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency.
 
-- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
-- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
-- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
-- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
-- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
-- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
-
-Hopefully these will help you to follow best practices, including:
-* Read data for views with reactive streams on the main thread
-* Process data on a background thread
-* Query with type safe enum and associated values
-
-**More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
+Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. **More Data** allows you to build on this foundation but simplify with a more declarative and Swift-native interface for your app code.
 
 **[A walkthrough video of the library and sample app is available on youtube](https://www.youtube.com/watch?v=jhNxRh7DJ7s)**
 
 <img src="https://github.com/user-attachments/assets/58257e54-eac1-4a6a-8ca8-cfaf1d3e63b4" width=350 />
-
-## Installation
-
-### Swift Package Manager
-
-To integrate `MoreData` into your project using [Swift Package Manager](https://swift.org/package-manager/), add the following dependency to your `Package.swift` file:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/ChrisLaganiere/MoreData.git", from: "2.0.2")
-]
-```
-
-## Contents
 
 With More Data, integrating Core Data in Swift projects is simple and easy:
 ```swift
@@ -66,6 +40,34 @@ fetchRequest.sortDescriptors = [
 fetchRequest.fetchLimit = 10
 let results = try moc.fetch(fetchRequest)
 ```
+
+## Installation
+
+### Swift Package Manager
+
+To integrate `MoreData` into your project using [Swift Package Manager](https://swift.org/package-manager/), add the following dependency to your `Package.swift` file:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/ChrisLaganiere/MoreData.git", from: "2.0.2")
+]
+```
+
+## Contents
+
+Includes:
+
+- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
+- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
+- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
+- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
+- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
+- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
+
+Hopefully these will help you to follow best practices, including:
+* Read data for views with reactive streams on the main thread
+* Process data on a background thread
+* Query with type safe enum and associated values
 
 ### Fetchable
 
