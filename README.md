@@ -12,11 +12,6 @@ Helpers for integrating Core Data with a modern app, using Swift enums, Combine 
 
 Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. **More Data** allows you to build on this foundation but simplify with a more declarative and Swift-native interface for your app code.
 
-**[A walkthrough video of the library and sample app is available on youtube](https://www.youtube.com/watch?v=jhNxRh7DJ7s)**
-
-<img src="https://github.com/user-attachments/assets/58257e54-eac1-4a6a-8ca8-cfaf1d3e63b4" width=350 />
-
-With More Data, integrating Core Data in Swift projects is simple and easy:
 ```swift
 // ✅
 // Easy, Swift-first, declarative syntax
@@ -40,6 +35,11 @@ fetchRequest.sortDescriptors = [
 fetchRequest.fetchLimit = 10
 let results = try moc.fetch(fetchRequest)
 ```
+
+**[A walkthrough video of the library and sample app is available on youtube](https://www.youtube.com/watch?v=jhNxRh7DJ7s)**
+
+<img src="https://github.com/user-attachments/assets/58257e54-eac1-4a6a-8ca8-cfaf1d3e63b4" width=350 />
+
 
 ## Installation
 
