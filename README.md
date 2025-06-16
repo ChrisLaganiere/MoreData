@@ -8,25 +8,38 @@
 [![Platforms](https://img.shields.io/badge/visionOS-1.0%2B-blue.svg)](https://developer.apple.com/visionos/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 
-Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency. Includes:
+Helpers for integrating Core Data with a modern app, using Swift enums, Combine publishers, and structured concurrency.
 
-- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
-- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
-- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
-- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
-- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
-- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
+Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. **More Data** allows you to build on this foundation but simplify with a more declarative and Swift-native interface for your app code.
 
-Hopefully these will help you to follow best practices, including:
-* Read data for views with reactive streams on the main thread
-* Process data on a background thread
-* Query with type safe enum and associated values
+```swift
+// ✅
+// Easy, Swift-first, declarative syntax
+let results = try Person.all(
+    matching: .nameContains("Kyle"),
+    sortedBy: .name,
+    fetchLimit: 10,
+    moc: moc
+)
+```
 
-**More Data** is designed to streamline working with Core Data in Swift projects. Core Data is a powerful and mature framework, but is clunky and written in Objective-C, bridged to Swift. The collection of protocols and utilities here retains the power of Core Data but allows you to simplify by building a more declarative and Swift-native interface for your data layer.
+Compare that with vanilla Core Data...
+```swift
+// ❌
+// This is vanilla Core Data. Powerful but very verbose, and not type-safe... You deserve better
+let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
+fetchRequest.sortDescriptors = [
+    NSSortDescriptor(keyPath: \Person.name, ascending: true)
+]
+fetchRequest.fetchLimit = 10
+let results = try moc.fetch(fetchRequest)
+```
 
 **[A walkthrough video of the library and sample app is available on youtube](https://www.youtube.com/watch?v=jhNxRh7DJ7s)**
 
 <img src="https://github.com/user-attachments/assets/58257e54-eac1-4a6a-8ca8-cfaf1d3e63b4" width=350 />
+
 
 ## Installation
 
@@ -42,34 +55,25 @@ dependencies: [
 
 ## Contents
 
+Includes:
+
+- **Fetchable** protocol: Adds a bunch of static helper methods to your entity classes that make data manipulation easier in a Swift app.
+- **FetchableResultsPublisher**: Reactive fetching and observing of Core Data entities using a Combine publisher.
+- **Filtering** protocol: Allows you to create Swift enums that simplify the creation and combination of `NSPredicate` objects for specifying filter criteria.
+- **Sorting** protocol: Allows you to create Swift enums that simplify the creation of `NSSortDescriptor` objects for sorting fetched results.
+- **@FetchableRequest** property wrapper: A better way to power SwiftUI views, backed by Core Data, in the modern Swift way.
+- **CoreDataPersistenceController**: Pre-approved boilerplate for a full Core Data stack, providing easy setup for recommended best practices.
+
+Hopefully these will help you to follow best practices, including:
+* Read data for views with reactive streams on the main thread
+* Process data on a background thread
+* Query with type safe enum and associated values
+
 ### Fetchable
 
 `Fetchable` allows composable, declarative fetch requests with Core Data entities.
 
 To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclass to the `Fetchable` protocol. You will get, as a result, static helper methods to perform easy, composable, declarative fetch requests.
-
-Making a fetch request is such a pain with vanilla Core Data:
-```swift
-// This is how you normally have to do it, very verbose and the predicate is not type-safe ❌
-let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
-fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
-fetchRequest.sortDescriptors = [
-    NSSortDescriptor(keyPath: \Person.name, ascending: true)
-]
-fetchRequest.fetchLimit = 10
-let results = try moc.fetch(fetchRequest)
-```
-
-So much easier with some wrappers bridging to modern Swift using More Data:
-```swift
-// Same thing, much easier ✅
-let results = try Person.all(
-    matching: .nameContains("Kyle"),
-    sortedBy: .name,
-    fetchLimit: 10,
-    moc: moc
-)
-```
 
 #### Example Fetchable protocol implementation
 
@@ -83,10 +87,13 @@ class Person: NSManagedObject {
 }
 
 // MARK: Fetchable
-extension Person: Fetchable { }
+extension Person: Fetchable {
+    typealias Filter = PersonFilter
+    typealias Sort = PersonSort
+}
 
-// This gets even better -- we'll set up nicer sort and filter types to replace the NSPredicate below
-let kyles = try? Person.all(predicate: NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle"), moc: moc)
+// Swift-native helpers fit together to make it easy to safely perform a fetch request for people named "Kyle"
+let kyles = try? Person.all(matching: .nameContains("Kyle"), sortedBy: .nameAscending, moc: moc)
 ```
 
 ### Filtering
