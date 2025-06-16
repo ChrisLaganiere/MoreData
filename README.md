@@ -42,15 +42,22 @@ dependencies: [
 
 ## Contents
 
-### Fetchable
-
-`Fetchable` allows composable, declarative fetch requests with Core Data entities.
-
-To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclass to the `Fetchable` protocol. You will get, as a result, static helper methods to perform easy, composable, declarative fetch requests.
-
-Making a fetch request is such a pain with vanilla Core Data:
+With More Data, integrating Core Data in Swift projects is simple and easy:
 ```swift
-// This is how you normally have to do it, very verbose and the predicate is not type-safe ❌
+// ✅
+// Easy, Swift-first, declarative syntax
+let results = try Person.all(
+    matching: .nameContains("Kyle"),
+    sortedBy: .name,
+    fetchLimit: 10,
+    moc: moc
+)
+```
+
+Compare that with vanilla Core Data...
+```swift
+// ❌
+// This is vanilla Core Data. Powerful but very verbose, and not type-safe... You deserve better
 let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
 fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle")
 fetchRequest.sortDescriptors = [
@@ -60,16 +67,11 @@ fetchRequest.fetchLimit = 10
 let results = try moc.fetch(fetchRequest)
 ```
 
-So much easier with some wrappers bridging to modern Swift using More Data:
-```swift
-// Same thing, much easier ✅
-let results = try Person.all(
-    matching: .nameContains("Kyle"),
-    sortedBy: .name,
-    fetchLimit: 10,
-    moc: moc
-)
-```
+### Fetchable
+
+`Fetchable` allows composable, declarative fetch requests with Core Data entities.
+
+To use it, define `Sort` and `Filter` types for your entity class, implementing the `SortProtocol` and `FilteringProtocol` described below. Then, simply conform your Core Data entity's `NSManagedObject` subclass to the `Fetchable` protocol. You will get, as a result, static helper methods to perform easy, composable, declarative fetch requests.
 
 #### Example Fetchable protocol implementation
 
