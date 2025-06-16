@@ -7,12 +7,20 @@ extension NSPredicate {
 
     // MARK: Strings and other objects
 
+    public static func `is`<T>(_ keyPath: KeyPath<some Any, T>, value: T) -> NSPredicate where T: CVarArg {
+        return NSPredicate(format: "%K == %@", NSExpression(forKeyPath: keyPath).keyPath, value)
+    }
+
     public static func `is`<T>(_ keyPath: KeyPath<some Any, T?>, value: T?) -> NSPredicate where T: CVarArg {
         if let value = value {
             return NSPredicate(format: "%K == %@", NSExpression(forKeyPath: keyPath).keyPath, value)
         } else {
             return NSPredicate(format: "%K == nil", NSExpression(forKeyPath: keyPath).keyPath)
         }
+    }
+
+    public static func isNot<T>(_ keyPath: KeyPath<some Any, T>, value: T) -> NSPredicate where T: CVarArg {
+        return NSPredicate(format: "%K != %@", NSExpression(forKeyPath: keyPath).keyPath, value)
     }
 
     public static func isNot<T>(_ keyPath: KeyPath<some Any, T?>, value: T?) -> NSPredicate where T: CVarArg {

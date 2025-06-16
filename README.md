@@ -83,10 +83,13 @@ class Person: NSManagedObject {
 }
 
 // MARK: Fetchable
-extension Person: Fetchable { }
+extension Person: Fetchable {
+    typealias Filter = PersonFilter
+    typealias Sort = PersonSort
+}
 
-// This gets even better -- we'll set up nicer sort and filter types to replace the NSPredicate below
-let kyles = try? Person.all(predicate: NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Person.name), "Kyle"), moc: moc)
+// Swift-native helpers fit together to make it easy to safely perform a fetch request for people named "Kyle"
+let kyles = try? Person.all(matching: .nameContains("Kyle"), sortedBy: .nameAscending, moc: moc)
 ```
 
 ### Filtering
